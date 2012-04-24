@@ -26,3 +26,31 @@ class PasswordRecoveryForm(forms.Form):
         except User.DoesNotExist:
             raise forms.ValidationError(_("Sorry, this user doesn't exist."))
         return username
+
+
+class PasswordResetForm(forms.Form):
+    password1 = forms.CharField(
+        label=_('New password'),
+        widget=forms.PasswordInput,
+    )
+    password2 = forms.CharField(
+        label=_('New password (confirm)'),
+        widget=forms.PasswordInput,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(PasswordResetForm, self).__init__(*args, **kwargs)
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1', '')
+        password2 = self.cleaned_data['password2']
+        if not password1 == password2:
+            raise forms.ValidationError(_("The two passwords didn't match."))
+        return password2
+
+    def save(self):
+        self.user.set_password(self.cleaned_data['password1'])
+        User.objects.filter(pk=self.user.pk).update(
+            password=self.user.password,
+        )
