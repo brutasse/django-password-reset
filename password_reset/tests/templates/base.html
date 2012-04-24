@@ -1,0 +1,3 @@
+{% block title %}{% endblock %}
+
+{% block content %}{% endblock %}

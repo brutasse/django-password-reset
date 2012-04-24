@@ -22,7 +22,7 @@ class PasswordRecoveryForm(forms.Form):
             key = 'username'
         key = '%s__exact' % key if self.case_sensitive else '%s__iexact' % key
         try:
-            user = User.objects.get(**{key: username})
+            self.cleaned_data['user'] = User.objects.get(**{key: username})
         except User.DoesNotExist:
             raise forms.ValidationError(_("Sorry, this user doesn't exist."))
         return username

@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User
+from django.core import mail
+from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.client import RequestFactory
 
+from .. import views
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 
 
@@ -14,7 +18,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        user = User.objects.create_user('foo', 'bar@example.com', 'pass')
+        User.objects.create_user('foo', 'bar@example.com', 'pass')
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'foo',
@@ -70,3 +74,53 @@ class FormTests(TestCase):
         self.assertEqual(user.password, old_sha)
         form.save()
         self.assertNotEqual(user.password, old_sha)
+
+
+class ViewTests(TestCase):
+    urls = 'password_reset.urls'
+
+    def setUp(self):
+        self.user = User.objects.create_user('foo', 'bar@example.com', 'test')
+        self.factory = RequestFactory()
+
+    def test_recover(self):
+        url = reverse('password_reset_recover')
+        request = self.factory.get(url)
+        response = views.recover(request)
+        self.assertContains(response, 'Username or Email')
+
+        request = self.factory.post(url, {'username_or_email': 'test'})
+        response = views.recover(request)
+        self.assertContains(response, "Sorry, this user")
+
+        request = self.factory.post(url, {'username_or_email': 'foo'})
+        self.assertEqual(len(mail.outbox), 0)
+        response = views.recover(request)
+        self.assertEqual(len(mail.outbox), 1)
+
+        message = mail.outbox[0]
+
+        self.assertEqual(message.subject,
+                         u'Password recovery on testserver')
+
+        self.assertTrue('Dear foo,' in message.body)
+
+        url = message.body.split('http://testserver')[1].split('\n', 1)[0]
+
+        response = self.client.get(url)
+        self.assertContains(response, 'New password (confirm)')
+        self.assertContains(response, 'Hi, <strong>foo</strong>')
+
+        data = {'password1': 'foo',
+                'password2': 'foo'}
+        response = self.client.post(url, data, follow=True)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertContains(response,
+                            "Your password has successfully been reset.")
+
+    def test_invalid_reset_link(self):
+        url = reverse('password_reset_reset', args=['foobar-invalid'])
+
+        response = self.client.get(url)
+        self.assertContains(response,
+                            "Sorry, this password reset link is invalid")
