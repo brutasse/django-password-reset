@@ -10,7 +10,7 @@ Class-based views for password reset, the usual "forget password?" workflow:
 The token is not stored server-side, it is generated using Django's signing
 functionality.
 
-* Author: Bruno Renie and `contributors`_
+* Author: Bruno Renié and `contributors`_
 * Licence: BSD
 * Compatibility: Django 1.4+ (cryptographic signing needed)
 
