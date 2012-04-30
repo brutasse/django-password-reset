@@ -14,7 +14,7 @@ setup(
     license='BSD licence, see LICENSE file',
     description='Class-based views for password reset.',
     long_description=open('README.rst').read(),
-    install_require=[
+    install_requires=[
         'Django>=1.4',
     ],
     classifiers=[
