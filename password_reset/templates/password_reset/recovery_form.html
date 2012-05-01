@@ -5,9 +5,13 @@
 {% block title %}{% trans "Password recovery" %}{% endblock %}
 
 {% block content %}
-	<form method="post" action="{% url "password_reset_recover" %}">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<p><input type="submit" value="{% trans "Recover my password" %}"></p>
-	</form>
+	{% if form %}
+		<form method="post" action="{% if url %}{{ url }}{% else %}{% url "password_reset_recover" %}{% endif %}">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<p><input type="submit" value="{% trans "Recover my password" %}"></p>
+		</form>
+	{% else %}
+		<p>{% blocktrans %}An email has just been sent to <strong>{{ email }}</strong>. Use the link in it to set a new password.{% endblocktrans %}</p>
+	{% endif %}
 {% endblock %}
