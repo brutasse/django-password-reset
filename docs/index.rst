@@ -22,6 +22,7 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   views
 
 
 Indices and tables
