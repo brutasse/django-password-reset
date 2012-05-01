@@ -21,10 +21,19 @@ class Recover(SaltMixin, generic.FormView):
     template_name = 'password_reset/recovery_form.html'
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
+    search_fields = ['username', 'email']
+
+    def get_context_data(self, **kwargs):
+        if hasattr(self, 'url'):
+            kwargs['url'] = self.url
+        return super(Recover, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
         kwargs = super(Recover, self).get_form_kwargs()
-        kwargs['case_sensitive'] = self.case_sensitive
+        kwargs.update({
+            'case_sensitive': self.case_sensitive,
+            'search_fields': self.search_fields,
+        })
         return kwargs
 
     def send_notification(self):
@@ -44,7 +53,14 @@ class Recover(SaltMixin, generic.FormView):
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
         self.send_notification()
-        context = {'email': self.user.email}
+        if (len(self.search_fields) == 1 and
+            self.search_fields[0] == 'username'):
+            # if we only search by username, don't disclose the user email
+            # since it may now be public information.
+            email = self.user.username
+        else:
+            email = self.user.email
+        context = {'email': email}
         return self.render_to_response(self.get_context_data(**context))
 recover = Recover.as_view()
 

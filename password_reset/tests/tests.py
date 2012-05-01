@@ -50,6 +50,54 @@ class FormTests(TestCase):
         }, case_sensitive=False)
         self.assertTrue(form.is_valid())
 
+    def test_form_custom_search(self):
+        # Searching only for email does some extra validation
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'barexample.com',
+        }, search_fields=['email'])
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username_or_email'],
+                         ['Enter a valid e-mail address.'])
+
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'bar@example.com',
+        }, search_fields=['email'])
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username_or_email'],
+                         ["Sorry, this user doesn't exist."])
+
+        user = User.objects.create_user('test@example.com',
+                                        'foo@example.com', 'pass')
+
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'test@example.com',
+        }, search_fields=['email'])
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username_or_email'],
+                         ["Sorry, this user doesn't exist."])
+
+        # Search by actual email works
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'foo@example.com',
+        }, search_fields=['email'])
+        self.assertTrue(form.is_valid())
+
+        # Now search by username
+        user.username = 'username'
+        user.save()
+
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'foo@example.com',
+        }, search_fields=['username'])
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['username_or_email'],
+                         ["Sorry, this user doesn't exist."])
+
+        form = PasswordRecoveryForm(data={
+            'username_or_email': 'username',
+        }, search_fields=['username'])
+        self.assertTrue(form.is_valid())
+
     def test_password_reset_form(self):
         user = User.objects.create_user('foo', 'bar@example.com', 'pass')
         old_sha = user.password
@@ -77,25 +125,20 @@ class FormTests(TestCase):
 
 
 class ViewTests(TestCase):
-    urls = 'password_reset.urls'
-
     def setUp(self):
         self.user = User.objects.create_user('foo', 'bar@example.com', 'test')
-        self.factory = RequestFactory()
 
     def test_recover(self):
         url = reverse('password_reset_recover')
-        request = self.factory.get(url)
-        response = views.recover(request)
+        response = self.client.get(url)
         self.assertContains(response, 'Username or Email')
 
-        request = self.factory.post(url, {'username_or_email': 'test'})
-        response = views.recover(request)
+        response = self.client.post(url, {'username_or_email': 'test'})
         self.assertContains(response, "Sorry, this user")
 
-        request = self.factory.post(url, {'username_or_email': 'foo'})
         self.assertEqual(len(mail.outbox), 0)
-        response = views.recover(request)
+        response = self.client.post(url, {'username_or_email': 'foo'})
+        self.assertContains(response, "<strong>bar@example.com</strong>")
         self.assertEqual(len(mail.outbox), 1)
 
         message = mail.outbox[0]
@@ -124,3 +167,38 @@ class ViewTests(TestCase):
         response = self.client.get(url)
         self.assertContains(response,
                             "Sorry, this password reset link is invalid")
+
+    def test_email_recover(self):
+        url = reverse('email_recover')
+        response = self.client.get(url)
+        self.assertNotContains(response, "Username or Email")
+        self.assertContains(response, "Email:")
+
+        response = self.client.post(url, {'username_or_email': 'foo'})
+        self.assertContains(response, "Enter a valid e-mail address")
+
+        response = self.client.post(url, {'username_or_email': 'foo@ex.com'})
+        self.assertContains(response, "Sorry, this user")
+
+        self.assertEqual(len(mail.outbox), 0)
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@example.com'})
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertContains(response, '<strong>bar@example.com</strong>')
+
+    def test_username_recover(self):
+        url = reverse('username_recover')
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "Username or Email")
+        self.assertContains(response, "Username:")
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@example.com'})
+        self.assertContains(response, "Sorry, this user")
+
+        self.assertEqual(len(mail.outbox), 0)
+        response = self.client.post(url,
+                                    {'username_or_email': 'foo'})
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertContains(response, '<strong>foo</strong>')
