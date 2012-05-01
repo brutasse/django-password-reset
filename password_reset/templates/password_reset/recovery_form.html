@@ -6,7 +6,7 @@
 
 {% block content %}
 	{% if form %}
-		<form method="post" action="{% if url %}{{ url }}{% else %}{% url "password_reset_recover" %}{% endif %}">
+		<form method="post" action="{{ url }}">
 			{% csrf_token %}
 			{{ form.as_p }}
 			<p><input type="submit" value="{% trans "Recover my password" %}"></p>

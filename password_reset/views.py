@@ -24,8 +24,7 @@ class Recover(SaltMixin, generic.FormView):
     search_fields = ['username', 'email']
 
     def get_context_data(self, **kwargs):
-        if hasattr(self, 'url'):
-            kwargs['url'] = self.url
+        kwargs['url'] = self.request.get_full_path()
         return super(Recover, self).get_context_data(**kwargs)
 
     def get_form_kwargs(self):
