@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.template import loader
 from django.views import generic
+from django.http import HttpResponseRedirect
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 
@@ -83,6 +84,10 @@ class Reset(SaltMixin, generic.FormView):
 
         self.user = get_object_or_404(User, pk=pk)
         return super(Reset, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def invalid(self):
         return self.render_to_response(self.get_context_data(invalid=True))
