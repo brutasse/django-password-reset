@@ -4,7 +4,7 @@ from django.contrib.sites.models import RequestSite
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.template import loader
 from django.views import generic
 
@@ -100,6 +100,10 @@ class Reset(SaltMixin, generic.FormView):
                 'token': self.kwargs['token'],
             })
         return ctx
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.get_success_url())
 reset = Reset.as_view()
 
 

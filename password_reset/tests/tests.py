@@ -161,6 +161,8 @@ class ViewTests(TestCase):
         self.assertContains(response,
                             "Your password has successfully been reset.")
 
+        self.assertTrue(User.objects.get().check_password('foo'))
+
     def test_invalid_reset_link(self):
         url = reverse('password_reset_reset', args=['foobar-invalid'])
 
