@@ -39,7 +39,7 @@ class PasswordRecoveryForm(forms.Form):
         return username
 
     def get_user_by_username(self, username):
-        key = 'username__%sexact' % '' if self.case_sensitive else 'i'
+        key = 'username__%sexact' % ('' if self.case_sensitive else 'i')
         try:
             user = User.objects.get(**{key: username})
         except User.DoesNotExist:
@@ -48,7 +48,7 @@ class PasswordRecoveryForm(forms.Form):
 
     def get_user_by_email(self, email):
         validate_email(email)
-        key = 'email__%sexact' % '' if self.case_sensitive else 'i'
+        key = 'email__%sexact' % ('' if self.case_sensitive else 'i')
         try:
             user = User.objects.get(**{key: email})
         except User.DoesNotExist:

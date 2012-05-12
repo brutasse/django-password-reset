@@ -204,3 +204,24 @@ class ViewTests(TestCase):
                                     {'username_or_email': 'foo'})
         self.assertEqual(len(mail.outbox), 1)
         self.assertContains(response, '<strong>foo</strong>')
+
+    def test_insensitive_recover(self):
+        url = reverse('insensitive_recover')
+        response = self.client.get(url)
+        normalized = '<strong>bar@example.com</strong>'
+
+        self.assertContains(response, 'Username or Email')
+        self.assertEqual(len(mail.outbox), 0)
+        response = self.client.post(url, {'username_or_email': 'FOO'})
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertContains(response, normalized)
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@EXAmPLE.coM'})
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertContains(response, normalized)
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@example.com'})
+        self.assertEqual(len(mail.outbox), 3)
+        self.assertContains(response, normalized)
