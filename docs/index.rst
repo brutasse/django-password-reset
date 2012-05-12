@@ -24,6 +24,12 @@ Contents:
    quickstart
    views
 
+Changelog
+---------
+
+* 0.2: Bugfix, actually save the new password.
+* 0.1: Initial version.
+
 
 Indices and tables
 ==================
