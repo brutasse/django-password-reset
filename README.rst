@@ -1,6 +1,8 @@
 Django-password-reset
 =====================
 
+.. image:: https://secure.travis-ci.org/brutasse/django-password-reset.png
+
 Class-based views for password reset, the usual "forget password?" workflow:
 
 * User fills his email address or username
