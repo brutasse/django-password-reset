@@ -2,6 +2,8 @@ Django-password-reset
 =====================
 
 .. image:: https://secure.travis-ci.org/brutasse/django-password-reset.png
+   :alt: Build Status
+   :target: https://secure.travis-ci.org/brutasse/django-password-reset
 
 Class-based views for password reset, the usual "forget password?" workflow:
 
