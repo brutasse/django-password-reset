@@ -72,7 +72,7 @@ recover = Recover.as_view()
 
 class Reset(SaltMixin, generic.FormView):
     form_class = PasswordResetForm
-    token_expires = 3600 * 2  # Two days
+    token_expires = 3600 * 48  # Two days
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
 
