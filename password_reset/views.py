@@ -15,6 +15,11 @@ class SaltMixin(object):
     salt = 'password_recovery'
 
 
+class MailSent(generic.TemplateView):
+    template_name = "password_reset/reset_sent.html"
+
+mail_sent = MailSent.as_view()
+
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
@@ -22,6 +27,7 @@ class Recover(SaltMixin, generic.FormView):
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
+    success_url = reverse_lazy('password_reset_sent')
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -59,14 +65,14 @@ class Recover(SaltMixin, generic.FormView):
             email = self.user.username
         else:
             email = self.user.email
-        context = {'email': email}
-        return self.render_to_response(self.get_context_data(**context))
+#        return super(Recover, self).form_valid(form)
+        return redirect(self.get_success_url()+"?mail=%s" % email)
 recover = Recover.as_view()
 
 
 class Reset(SaltMixin, generic.FormView):
     form_class = PasswordResetForm
-    token_expires = 3600 * 48  # Two days
+    token_expires = 3600 * 2  # Two days
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
 

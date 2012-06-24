@@ -5,13 +5,9 @@
 {% block title %}{% trans "Password recovery" %}{% endblock %}
 
 {% block content %}
-	{% if form %}
-		<form method="post" action="{{ url }}">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<p><input type="submit" value="{% trans "Recover my password" %}"></p>
-		</form>
-	{% else %}
-		<p>{% blocktrans %}An email has just been sent to <strong>{{ email }}</strong>. Use the link in it to set a new password.{% endblocktrans %}</p>
-	{% endif %}
+    <form method="post" action="{{ url }}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input type="submit" value="{% trans "Recover my password" %}"></p>
+    </form>
 {% endblock %}
