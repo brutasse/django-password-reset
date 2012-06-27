@@ -213,10 +213,25 @@ class ViewTests(TestCase):
         self.assertRedirects(response, 'http://testserver/sent/%s/' % signature)
     
     def test_invalid_signature(self):
-        import ipdb; ipdb.set_trace()
         url = reverse('password_reset_sent', kwargs={'signature': 'test@example.com:122323333'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 400)
+
+    def test_content_redirection(self):
+        url = reverse('username_recover')
+        response = self.client.get(url)
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'foo'}, follow=True)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertContains(response, '<strong>foo</strong>')
+        url = reverse('email_recover')
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@example.com'}, follow=True)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertContains(response, '<strong>bar@example.com</strong>')
 
     def test_insensitive_recover(self):
         url = reverse('insensitive_recover')
