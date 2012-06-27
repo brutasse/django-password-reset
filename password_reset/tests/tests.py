@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.core.signing import Signer
 from django.test import TestCase
 from django.test.client import RequestFactory
 
@@ -127,6 +128,7 @@ class FormTests(TestCase):
 class ViewTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('foo', 'bar@example.com', 'test')
+        self.signer = Signer()
 
     def test_recover(self):
         url = reverse('password_reset_recover')
@@ -138,7 +140,10 @@ class ViewTests(TestCase):
 
         self.assertEqual(len(mail.outbox), 0)
         response = self.client.post(url, {'username_or_email': 'foo'})
-        self.assertContains(response, "<strong>bar@example.com</strong>")
+        # we search for both fields so it returns the e-mail
+        signature = self.signer.sign('bar@example.com')
+        self.assertRedirects(response, 'http://testserver/sent/%s/' % signature)
+        
         self.assertEqual(len(mail.outbox), 1)
 
         message = mail.outbox[0]
@@ -186,7 +191,8 @@ class ViewTests(TestCase):
         response = self.client.post(url,
                                     {'username_or_email': 'bar@example.com'})
         self.assertEqual(len(mail.outbox), 1)
-        self.assertContains(response, '<strong>bar@example.com</strong>')
+        mail_signature = self.signer.sign('bar@example.com')
+        self.assertRedirects(response, 'http://testserver/sent/%s/' % mail_signature)
 
     def test_username_recover(self):
         url = reverse('username_recover')
@@ -203,25 +209,49 @@ class ViewTests(TestCase):
         response = self.client.post(url,
                                     {'username_or_email': 'foo'})
         self.assertEqual(len(mail.outbox), 1)
+        signature = self.signer.sign('foo')
+        self.assertRedirects(response, 'http://testserver/sent/%s/' % signature)
+    
+    def test_invalid_signature(self):
+        url = reverse('password_reset_sent', kwargs={'signature': 'test@example.com:122323333'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 400)
+
+    def test_content_redirection(self):
+        url = reverse('username_recover')
+        response = self.client.get(url)
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'foo'}, follow=True)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(response.redirect_chain), 1)
         self.assertContains(response, '<strong>foo</strong>')
+        url = reverse('email_recover')
+        response = self.client.post(url,
+                                    {'username_or_email': 'bar@example.com'}, follow=True)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(response.redirect_chain), 1)
+        self.assertContains(response, '<strong>bar@example.com</strong>')
 
     def test_insensitive_recover(self):
         url = reverse('insensitive_recover')
         response = self.client.get(url)
-        normalized = '<strong>bar@example.com</strong>'
 
         self.assertContains(response, 'Username or Email')
         self.assertEqual(len(mail.outbox), 0)
         response = self.client.post(url, {'username_or_email': 'FOO'})
         self.assertEqual(len(mail.outbox), 1)
-        self.assertContains(response, normalized)
+        signature = self.signer.sign(self.user.email)
+        self.assertRedirects(response, 'http://testserver/sent/%s/' % signature)
 
         response = self.client.post(url,
                                     {'username_or_email': 'bar@EXAmPLE.coM'})
         self.assertEqual(len(mail.outbox), 2)
-        self.assertContains(response, normalized)
+        signature = self.signer.sign('bar@EXAmPLE.coM'.lower())
+        self.assertRedirects(response, 'http://testserver/sent/%s/'%signature)
 
         response = self.client.post(url,
                                     {'username_or_email': 'bar@example.com'})
         self.assertEqual(len(mail.outbox), 3)
-        self.assertContains(response, normalized)
+        signature = self.signer.sign('bar@example.com')
+        self.assertRedirects(response, 'http://testserver/sent/%s/' % signature)

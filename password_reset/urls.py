@@ -4,6 +4,7 @@ from . import views
 
 
 urlpatterns = patterns('',
+    url(r'^sent/(?P<signature>.+)/$', views.mail_sent, name='password_reset_sent'),
     url(r'^recover/$', views.recover, name='password_reset_recover'),
     url(r'^reset/done/$', views.reset_done, name='password_reset_done'),
     url(r'^reset/(?P<token>[\w:-]+)/$', views.reset,

@@ -5,6 +5,7 @@ from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseBadRequest
 from django.template import loader
 from django.views import generic
 
@@ -15,6 +16,19 @@ class SaltMixin(object):
     salt = 'password_recovery'
 
 
+class MailSent(generic.TemplateView):
+    template_name = "password_reset/reset_sent.html"
+
+    def render_to_response(self, context, **response_kwargs):
+        try:            
+            original = signing.Signer().unsign(self.kwargs['signature'])
+        except signing.BadSignature:
+            return HttpResponseBadRequest()
+        context['email'] = original
+        return super(MailSent, self).render_to_response(context, **response_kwargs)
+
+mail_sent = MailSent.as_view()
+
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
@@ -22,6 +36,9 @@ class Recover(SaltMixin, generic.FormView):
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
+
+    def get_success_url(self):
+        return reverse_lazy('password_reset_sent', kwargs={'signature':self.mail_signature})
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -59,8 +76,8 @@ class Recover(SaltMixin, generic.FormView):
             email = self.user.username
         else:
             email = self.user.email
-        context = {'email': email}
-        return self.render_to_response(self.get_context_data(**context))
+        self.mail_signature = signing.Signer().sign(email)
+        return redirect(self.get_success_url())
 recover = Recover.as_view()
 
 
@@ -109,4 +126,6 @@ reset = Reset.as_view()
 
 class ResetDone(generic.TemplateView):
     template_name = 'password_reset/recovery_done.html'
+
+
 reset_done = ResetDone.as_view()
