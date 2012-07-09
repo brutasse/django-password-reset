@@ -5,9 +5,9 @@
 {% block title %}{% trans "Password recovery" %}{% endblock %}
 
 {% block content %}
-    <form method="post" action="{{ url }}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <p><input type="submit" value="{% trans "Recover my password" %}"></p>
-    </form>
+	<form method="post" action="{{ url }}">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<p><input type="submit" value="{% trans "Recover my password" %}"></p>
+	</form>
 {% endblock %}

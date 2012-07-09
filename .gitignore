@@ -1,4 +1,4 @@
 django_password_reset.egg-info
 dist
-idocs/_build
+docs/_build
 *.pyc
