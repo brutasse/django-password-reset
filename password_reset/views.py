@@ -9,12 +9,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.template import loader
+from django.utils import timezone
 from django.views import generic
-
-try:
-    from django.utils import timezone
-except ImportError:
-    from datetime import datetime as timezone
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 
@@ -35,11 +31,11 @@ def loads_with_timestamp(value, salt):
     return timestamp, signing.loads(value, salt=salt)
 
 
-class MailSent(SaltMixin, generic.TemplateView):
+class RecoverDone(SaltMixin, generic.TemplateView):
     template_name = "password_reset/reset_sent.html"
 
     def get_context_data(self, **kwargs):
-        ctx = super(MailSent, self).get_context_data(**kwargs)
+        ctx = super(RecoverDone, self).get_context_data(**kwargs)
         try:
             ctx['timestamp'], ctx['email'] = loads_with_timestamp(
                 self.kwargs['signature'], salt=self.url_salt,
@@ -49,7 +45,7 @@ class MailSent(SaltMixin, generic.TemplateView):
         except signing.BadSignature:
             raise Http404
         return ctx
-mail_sent = MailSent.as_view()
+recover_done = RecoverDone.as_view()
 
 
 class Recover(SaltMixin, generic.FormView):

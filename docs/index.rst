@@ -27,7 +27,13 @@ Contents:
 Changelog
 ---------
 
-* 0.2: Bugfix, actually save the new password.
+* 0.3:
+
+  * The recover view now redirects to a signed URL to avoid duplicate
+    submissions.
+  * Bugfix: made ``case_sensitive`` work properly when set to ``False``.
+
+* 0.2: Bugfix: actually save the new password.
 * 0.1: Initial version.
 
 

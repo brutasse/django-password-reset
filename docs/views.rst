@@ -12,6 +12,10 @@ Views
     ``password_recovery``. If you're not already using this as a salt
     somewhere else in your app, you don't need to alter it.
 
+    Additionally, there is a ``url_salt`` used for redirecting the user after
+    he has entered his username or email. This salt **must** be different than
+    the other one. Its default value is ``password_recovery_url``.
+
     .. _salt used for signing the password reset link: https://docs.djangoproject.com/en/dev/topics/signing/#using-the-salt-argument
 
 Recover
@@ -47,6 +51,28 @@ Methods
 
 * ``send_notification()``: this builds the email context, loads the template
   and sends the password reset email.
+
+RecoverDone
+-----------
+
+This is a ``TemplateView`` to confirm the user that an email was sent.
+
+Attributes
+``````````
+
+* ``template_name``: ``password_reset/reset_sent.html``
+
+Template Context
+````````````````
+
+``invalid`` Set to ``True`` if the URL signature isn't valid, which happens if
+you change your ``SECRET_KEY``, the ``url_salt`` or if people try to
+reverse-engineer your URLs.
+
+``email``: the username or email of the user.
+
+``timestamp``: the time the signature was issues, which normally corresponds
+to the time the reset email was sent.
 
 Reset
 -----
