@@ -1,33 +1,56 @@
+import datetime
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import RequestSite
 from django.core import signing
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseBadRequest
+from django.http import Http404
 from django.template import loader
 from django.views import generic
+
+try:
+    from django.utils import timezone
+except ImportError:
+    from datetime import datetime as timezone
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 
 
 class SaltMixin(object):
     salt = 'password_recovery'
+    url_salt = 'password_recovery_url'
 
 
-class MailSent(generic.TemplateView):
+def loads_with_timestamp(value, salt):
+    """Returns the unsigned value along with its timestamp, the time when it
+    got dumped."""
+    try:
+        data = signing.loads(value, salt=salt, max_age=-1)
+    except signing.SignatureExpired as e:
+        age = float(str(e).split('Signature age ')[1].split(' >')[0])
+        timestamp = timezone.now() - datetime.timedelta(seconds=age)
+    return timestamp, signing.loads(value, salt=salt)
+
+
+class MailSent(SaltMixin, generic.TemplateView):
     template_name = "password_reset/reset_sent.html"
 
-    def render_to_response(self, context, **response_kwargs):
-        try:            
-            original = signing.Signer().unsign(self.kwargs['signature'])
+    def get_context_data(self, **kwargs):
+        ctx = super(MailSent, self).get_context_data(**kwargs)
+        try:
+            ctx['timestamp'], ctx['email'] = loads_with_timestamp(
+                self.kwargs['signature'], salt=self.url_salt,
+            )
+        except signing.SignatureExpired:
+            ctx['invalid'] = True
         except signing.BadSignature:
-            return HttpResponseBadRequest()
-        context['email'] = original
-        return super(MailSent, self).render_to_response(context, **response_kwargs)
-
+            raise Http404
+        return ctx
 mail_sent = MailSent.as_view()
+
 
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
@@ -38,7 +61,7 @@ class Recover(SaltMixin, generic.FormView):
     search_fields = ['username', 'email']
 
     def get_success_url(self):
-        return reverse_lazy('password_reset_sent', kwargs={'signature':self.mail_signature})
+        return reverse('password_reset_sent', args=[self.mail_signature])
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -76,8 +99,8 @@ class Recover(SaltMixin, generic.FormView):
             email = self.user.username
         else:
             email = self.user.email
-        self.mail_signature = signing.Signer().sign(email)
-        return redirect(self.get_success_url())
+        self.mail_signature = signing.dumps(email, salt=self.url_salt)
+        return super(Recover, self).form_valid(form)
 recover = Recover.as_view()
 
 
