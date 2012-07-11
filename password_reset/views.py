@@ -40,8 +40,6 @@ class RecoverDone(SaltMixin, generic.TemplateView):
             ctx['timestamp'], ctx['email'] = loads_with_timestamp(
                 self.kwargs['signature'], salt=self.url_salt,
             )
-        except signing.SignatureExpired:
-            ctx['invalid'] = True
         except signing.BadSignature:
             raise Http404
         return ctx

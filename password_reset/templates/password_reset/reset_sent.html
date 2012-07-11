@@ -4,9 +4,5 @@
 {% block title %}{% trans "Password recovery sent" %}{% endblock %}
 
 {% block content %}
-	{% if invalid %}
-		<p>{% trans "Invalid confirmation link." %}</p>
-	{% else %}
-		<p>{% blocktrans with ago=timestamp|timesince %}An email was sent to <strong>{{ email }}</strong> {{ ago }} ago. Use the link in it to set a new password.{% endblocktrans %}</p>
-	{% endif %}
+	<p>{% blocktrans with ago=timestamp|timesince %}An email was sent to <strong>{{ email }}</strong> {{ ago }} ago. Use the link in it to set a new password.{% endblocktrans %}</p>
 {% endblock %}
