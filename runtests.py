@@ -4,9 +4,7 @@ import sys
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'password_reset.tests.settings'
 
-from django.conf import settings
 from django.test.simple import DjangoTestSuiteRunner
-from django.utils.functional import empty
 
 
 def runtests(*test_args):
