@@ -25,6 +25,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
     ],
     test_suite='runtests.runtests',
     zip_safe=False,

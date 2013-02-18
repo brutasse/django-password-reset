@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 import os
 import sys
+import warnings
+
+warnings.simplefilter('always')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'password_reset.tests.settings'
 

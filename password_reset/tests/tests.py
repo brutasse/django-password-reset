@@ -54,8 +54,10 @@ class FormTests(TestCase):
             'username_or_email': 'barexample.com',
         }, search_fields=['email'])
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors['username_or_email'],
-                         ['Enter a valid e-mail address.'])
+        self.assertTrue(form.errors['username_or_email'] in [
+            ['Enter a valid email address.'],
+            ['Enter a valid e-mail address.'],
+        ])
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'bar@example.com',
@@ -178,7 +180,10 @@ class ViewTests(TestCase):
         self.assertContains(response, "Email:")
 
         response = self.client.post(url, {'username_or_email': 'foo'})
-        self.assertContains(response, "Enter a valid e-mail address")
+        try:
+            self.assertContains(response, "Enter a valid email address")
+        except AssertionError:
+            self.assertContains(response, "Enter a valid e-mail address")
 
         response = self.client.post(url, {'username_or_email': 'foo@ex.com'})
         self.assertContains(response, "Sorry, this user")
