@@ -24,11 +24,11 @@ def loads_with_timestamp(value, salt):
     """Returns the unsigned value along with its timestamp, the time when it
     got dumped."""
     try:
-        data = signing.loads(value, salt=salt, max_age=-1)
+        signing.loads(value, salt=salt, max_age=-1)
     except signing.SignatureExpired as e:
         age = float(str(e).split('Signature age ')[1].split(' >')[0])
         timestamp = timezone.now() - datetime.timedelta(seconds=age)
-    return timestamp, signing.loads(value, salt=salt)
+        return timestamp, signing.loads(value, salt=salt)
 
 
 class RecoverDone(SaltMixin, generic.TemplateView):
@@ -86,8 +86,10 @@ class Recover(SaltMixin, generic.FormView):
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
         self.send_notification()
-        if (len(self.search_fields) == 1 and
-            self.search_fields[0] == 'username'):
+        if (
+            len(self.search_fields) == 1 and
+            self.search_fields[0] == 'username'
+        ):
             # if we only search by username, don't disclose the user email
             # since it may now be public information.
             email = self.user.username

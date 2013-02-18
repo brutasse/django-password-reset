@@ -3,7 +3,8 @@ from django.conf.urls import url, patterns
 from . import views
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^recover/(?P<signature>.+)/$', views.recover_done,
         name='password_reset_sent'),
     url(r'^recover/$', views.recover, name='password_reset_recover'),
