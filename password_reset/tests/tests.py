@@ -1,9 +1,12 @@
-from django.contrib.auth.models import User
+import django
+
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
+from ..utils import get_user_model
 
 
 class FormTests(TestCase):
@@ -16,7 +19,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        User.objects.create_user('foo', 'bar@example.com', 'pass')
+        get_user_model().objects.create_user('foo', 'bar@example.com', 'pass')
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'foo',
@@ -66,8 +69,8 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        user = User.objects.create_user('test@example.com',
-                                        'foo@example.com', 'pass')
+        user = get_user_model().objects.create_user('test@example.com',
+                                                    'foo@example.com', 'pass')
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'test@example.com',
@@ -99,7 +102,8 @@ class FormTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_password_reset_form(self):
-        user = User.objects.create_user('foo', 'bar@example.com', 'pass')
+        user = get_user_model().objects.create_user('foo', 'bar@example.com',
+                                                    'pass')
         old_sha = user.password
 
         form = PasswordResetForm(user=user)
@@ -123,10 +127,15 @@ class FormTests(TestCase):
         form.save()
         self.assertNotEqual(user.password, old_sha)
 
+if django.VERSION >= (1, 5):
+    CustomFormTests = override_settings(
+        AUTH_USER_MODEL='tests.User')(FormTests)
+
 
 class ViewTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user('foo', 'bar@example.com', 'test')
+        self.user = get_user_model().objects.create_user(
+            'foo', 'bar@example.com', 'test')
 
     def test_recover(self):
         url = reverse('password_reset_recover')
@@ -164,7 +173,7 @@ class ViewTests(TestCase):
         self.assertContains(response,
                             "Your password has successfully been reset.")
 
-        self.assertTrue(User.objects.get().check_password('foo'))
+        self.assertTrue(get_user_model().objects.get().check_password('foo'))
 
     def test_invalid_reset_link(self):
         url = reverse('password_reset_reset', args=['foobar-invalid'])
@@ -265,3 +274,7 @@ class ViewTests(TestCase):
         self.assertEqual(len(mail.outbox), 3)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertContains(response, normalized)
+
+if django.VERSION >= (1, 5):
+    CustomViewTests = override_settings(
+        AUTH_USER_MODEL='tests.User')(ViewTests)

@@ -1,7 +1,6 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.sites.models import RequestSite
 from django.core import signing
 from django.core.mail import send_mail
@@ -13,6 +12,7 @@ from django.utils import timezone
 from django.views import generic
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
+from .utils import get_user_model
 
 
 class SaltMixin(object):
@@ -117,7 +117,7 @@ class Reset(SaltMixin, generic.FormView):
         except signing.BadSignature:
             return self.invalid()
 
-        self.user = get_object_or_404(User, pk=pk)
+        self.user = get_object_or_404(get_user_model(), pk=pk)
         return super(Reset, self).dispatch(request, *args, **kwargs)
 
     def invalid(self):

@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+
+from .utils import get_user_model
 
 
 class PasswordRecoveryForm(forms.Form):
@@ -40,6 +41,7 @@ class PasswordRecoveryForm(forms.Form):
 
     def get_user_by_username(self, username):
         key = 'username__%sexact' % ('' if self.case_sensitive else 'i')
+        User = get_user_model()
         try:
             user = User.objects.get(**{key: username})
         except User.DoesNotExist:
@@ -49,6 +51,7 @@ class PasswordRecoveryForm(forms.Form):
     def get_user_by_email(self, email):
         validate_email(email)
         key = 'email__%sexact' % ('' if self.case_sensitive else 'i')
+        User = get_user_model()
         try:
             user = User.objects.get(**{key: email})
         except User.DoesNotExist:
@@ -60,6 +63,7 @@ class PasswordRecoveryForm(forms.Form):
         key = key % '' if self.case_sensitive else key % 'i'
         f = lambda field: Q(**{field + key: username})
         filters = f('username') | f('email')
+        User = get_user_model()
         try:
             user = User.objects.get(filters)
         except User.DoesNotExist:
@@ -92,6 +96,6 @@ class PasswordResetForm(forms.Form):
 
     def save(self):
         self.user.set_password(self.cleaned_data['password1'])
-        User.objects.filter(pk=self.user.pk).update(
+        get_user_model().objects.filter(pk=self.user.pk).update(
             password=self.user.password,
         )

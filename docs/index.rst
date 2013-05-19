@@ -27,6 +27,14 @@ Contents:
 Changelog
 ---------
 
+* 0.5:
+
+  * Support for Django 1.5's custom user model.
+
+* 0.4:
+
+  * Python3 and Django 1.5 support.
+
 * 0.3:
 
   * The recover view now redirects to a signed URL to avoid duplicate
