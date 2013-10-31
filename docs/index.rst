@@ -27,6 +27,10 @@ Contents:
 Changelog
 ---------
 
+* 0.5.1:
+
+  * Spanish, Polish and Russian translations.
+
 * 0.5:
 
   * Support for Django 1.5's custom user model.
