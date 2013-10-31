@@ -1,2 +1,3 @@
-include README.rst LICENSE
+include README.rst LICENSE 
 recursive-include password_reset/templates *
+recursive-include password_reset/locale *
