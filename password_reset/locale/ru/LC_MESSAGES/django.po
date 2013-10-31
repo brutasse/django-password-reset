@@ -1,0 +1,125 @@
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Semen Pupkov <semen.pupkov@gmail.com>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-04 15:01+0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+
+#: forms.py:25
+msgid "Username"
+msgstr "Логин"
+
+#: forms.py:26
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:27
+msgid "Username or Email"
+msgstr "Логин или Email"
+
+#: forms.py:46 forms.py:55 forms.py:66
+msgid "Sorry, this user doesn't exist."
+msgstr "Извините, такого пользователя нет"
+
+#: forms.py:68
+msgid "Unable to find user."
+msgstr "Такого пользователя нет"
+
+#: forms.py:74
+msgid "New password"
+msgstr "Новый пароль"
+
+#: forms.py:78
+msgid "New password (confirm)"
+msgstr "Новый пароль (подтверждение)"
+
+#: forms.py:90
+msgid "The two passwords didn't match."
+msgstr "Пароли не совпадают"
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Новый пароль сохранен"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "Ваш пароль был успешно сброшен. Сейчас вы можете авторизоваться с новым паролем"
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Уважаемый %(username)s,"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr "Вы или кто-то еще, сделал запрос на сброс пароля на сайте %(domain)s."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Вы можете установить новый пароль пройдя по этой ссылке:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "Если вы не хотете сбрасывать ваш пароль, просто проигнорируйте это сообщение"
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Востановление пароля на сайте %(domain)s"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "Воставновление пароля"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "Востановить пароль"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr "Извините, эта ссылка для востановление пароля неверная, вы можете <a href="
+"\"%(recovery_url)s\">сделать новый запрос</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Здравствуйте, <strong>%(username)s</strong>. Пожалуйста задайте новый пароль"
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Установить новый пароль"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Запрос на востановление пароля отправлен"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr "Письмо с инструкциями по востановлению пароля было отправлено на <strong>%(email)s</strong> %(ago)s назад"
