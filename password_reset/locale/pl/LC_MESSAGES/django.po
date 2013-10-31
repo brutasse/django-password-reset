@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: django-password-reset\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-30 12:57+0100\n"
+"PO-Revision-Date: 2013-01-30 13:04+0100\n"
+"Last-Translator: Michał Sałaban <michal@salaban.info>\n"
+"Language-Team:  <michal@salaban.info>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-Country: Poland\n"
+
+#: forms.py:25
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+#: forms.py:26
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:27
+msgid "Username or Email"
+msgstr "Nazwa użytkownika lub email"
+
+#: forms.py:46
+#: forms.py:55
+#: forms.py:66
+msgid "Sorry, this user doesn't exist."
+msgstr "Niestety, taki użytkownik nie istnieje"
+
+#: forms.py:68
+msgid "Unable to find user."
+msgstr "Nie można znaleźć użytkownika."
+
+#: forms.py:74
+msgid "New password"
+msgstr "Nowe hasło"
+
+#: forms.py:78
+msgid "New password (confirm)"
+msgstr "Nowe hasło (potwierdź)"
+
+#: forms.py:90
+msgid "The two passwords didn't match."
+msgstr "Hasła się różnią."
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Ustawiono nowe hasło"
+
+#: templates/password_reset/recovery_done.html:6
+msgid "Your password has successfully been reset. You can use it right now on the login page."
+msgstr "Twoje hasło zostało pomyślnie zmienione. Możesz go już użyć na stronie logowania."
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Witaj %(username)s,"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid "You -- or someone pretending to be you -- has requested a password reset on %(domain)s."
+msgstr "Ty -- lub ktoś podający się za Ciebie -- zażądał zmiany hasła w %(domain)s."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Możesz ustawić nowe hasło, klikając w ten odnośnik:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid "If you don't want to reset your password, simply ignore this email and it will stay unchanged."
+msgstr "Jeśli nie chcesz zmieniać hasła, po prostu zignoruj tę wiadomość, a żadne zmiany nie zostaną wprowadzone."
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Odzyskiwanie hasła w %(domain)s"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "Odzyskiwanie hasła"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "Odzyskaj hasło"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid "Sorry, this password reset link is invalid. You can still <a href=\"%(recovery_url)s\">request a new one</a>."
+msgstr "Niestety, ten odnośnik jest nieprawidłowy. Możesz jednak <a href=\"%(recovery_url)s\">zażądać nowego</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Witaj, <strong>%(username)s</strong>. Wpisz swoje nowe hasło."
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Ustaw nowe hasło"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Wysłano odnośnik do zmiany hasła"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid "An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in it to set a new password."
+msgstr "%(ago)s wysłano wiadomość na adres <strong>%(email)s</strong>. Użyj zawartego tam odnośnika by zmienić hasło."
+
