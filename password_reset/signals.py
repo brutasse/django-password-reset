@@ -1,6 +1,6 @@
 from django.dispatch import Signal
 
-# signal sent when a user successfully recovers his/her password
+# signal sent when users successfully recover their passwords
 user_recovers_password = Signal(
-    providing_args=['user', 'request']
+    providing_args=['request']
 )
