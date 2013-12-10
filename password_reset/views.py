@@ -141,7 +141,8 @@ class Reset(SaltMixin, generic.FormView):
     def form_valid(self, form):
         form.save()
         user_recovers_password.send(
-            sender=form.user,
+            sender=get_user_model(),
+            user=form.user,
             request=self.request
         )
         return redirect(self.get_success_url())
