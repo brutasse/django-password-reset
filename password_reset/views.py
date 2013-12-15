@@ -13,6 +13,7 @@ from django.views import generic
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .utils import get_user_model
+from .signals import user_recovers_password
 
 
 class SaltMixin(object):
@@ -139,6 +140,11 @@ class Reset(SaltMixin, generic.FormView):
 
     def form_valid(self, form):
         form.save()
+        user_recovers_password.send(
+            sender=get_user_model(),
+            user=form.user,
+            request=self.request
+        )
         return redirect(self.get_success_url())
 reset = Reset.as_view()
 
