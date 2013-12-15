@@ -23,9 +23,14 @@ Contents:
 
    quickstart
    views
+   signals
 
 Changelog
 ---------
+
+* 0.6:
+
+  * New ``user_recovers_password`` signal (José Sazo).
 
 * 0.5.1:
 
