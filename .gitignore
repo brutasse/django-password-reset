@@ -3,3 +3,4 @@ dist
 docs/_build
 *.pyc
 .tox
+build
