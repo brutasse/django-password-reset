@@ -1,0 +1,127 @@
+# django-password-reset translations for DE.
+# This file is distributed under the same license as the django-password-reset package.
+# Hannes Rantzsch <hannesrantzsch@gmx.de>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-02-07 14:54+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Hannes Rantzsch <hannesrantzsch@gmx.de>\n"
+"Language-Team: DE <hannesrantzsch@gmx.de>\n"
+"Language: DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:26
+msgid "Username"
+msgstr "Benutzername"
+
+#: forms.py:27
+msgid "Email"
+msgstr "E-Mail"
+
+#: forms.py:28
+msgid "Username or Email"
+msgstr "Benutzername oder E-Mail"
+
+#: forms.py:48 forms.py:58 forms.py:70
+msgid "Sorry, this user doesn't exist."
+msgstr "Entschuldigung, dieser Benutzer existiert nicht."
+
+#: forms.py:72
+msgid "Unable to find user."
+msgstr "Benutzer konnte nicht gefunden werden."
+
+#: forms.py:78
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: forms.py:82
+msgid "New password (confirm)"
+msgstr "Neues Passwort (bestätigen)"
+
+#: forms.py:94
+msgid "The two passwords didn't match."
+msgstr "Die beiden Passwörter stimmen nicht überein."
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Neues Passwort wurde gesetzt"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "Ihr Passwort wurde erfolgreich zurückgesetzt. "
+"Sie können es ab sofort auf der Login-Seite verwenden"
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Sehr geehrte(r) %(username)s"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr "Sie -- oder jemand, der vorgibt Sie zu sein -- haben angefordert, "
+"Ihr Passwort auf %(domain)s zurückzusetzen."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Folgen Sie diesem Link, um ein neues Passwort festzulegen:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "Sollten Sie nicht angefordert haben, Ihr Passwort zurückzusetzen, ignorieren "
+"Sie einfach diese E-Mail und Ihr Passwort bleibt unverändert."
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Rücksetzung Ihres Passwortes auf %(domain)s"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "Passwort zurücksetzen"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "Passwort zurücksetzen"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr "Es tut uns Leid, dieser Link zur Passwortwiederherstellung ist ungültig. Sie können <a href="
+"\"%(recovery_url)s\">einen neuen anfordern</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Hallo, <strong>%(username)s</strong>. Bitte wählen Sie Ihr Passwort."
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Neues Passwort speichern"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Passwortrücksetzung versandt"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr "Eine E-Mail an <strong>%(email)s</strong> wurde vor %(ago)s versandt. "
+"Nutzen Sie den darin enthaltenen Link um Ihr Passwort zurückzusetzen."
