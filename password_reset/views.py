@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.conf import settings
 from django.contrib.sites.models import RequestSite
@@ -6,9 +7,10 @@ from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.template import loader
 from django.utils import timezone
+from django.utils.encoding import force_unicode
 from django.views import generic
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
@@ -84,6 +86,13 @@ class Recover(SaltMixin, generic.FormView):
         send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
                   [self.user.email])
 
+    def form_invalid(self, form):
+        response = super(Recover, self).form_invalid(form)
+        if self.request.is_ajax():
+            return HttpResponse(json.dumps({'error': u'\n'.join([force_unicode(i) for i in v]) for k, v in form.errors.items()}), mimetype='application/json', status=400)
+        else:
+            return response
+
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
         self.send_notification()
@@ -97,7 +106,10 @@ class Recover(SaltMixin, generic.FormView):
         else:
             email = self.user.email
         self.mail_signature = signing.dumps(email, salt=self.url_salt)
-        return super(Recover, self).form_valid(form)
+        if self.request.is_ajax():
+            return HttpResponse('{}', mimetype='application/json')
+        else:
+            return super(Recover, self).form_valid(form)
 recover = Recover.as_view()
 
 
