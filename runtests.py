@@ -16,7 +16,7 @@ def runtests(*test_args):
     sys.path.insert(0, parent)
 
     runner = DjangoTestSuiteRunner(verbosity=1, interactive=True,
-                                   failfast='--failfast' in sys.argv)
+                                   failfast=bool(os.environ.get('FAILFAST')))
     failures = runner.run_tests(test_args)
     sys.exit(failures)
 
