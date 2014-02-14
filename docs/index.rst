@@ -33,6 +33,10 @@ Changelog
   * Fix for custom user models without any field named ``username``.
     Properly take ``USERNAME_FIELD`` into account.
 
+  * Add German translation (GitHub user billyBlaze).
+
+  * Add Chinese translation (GitHub user saggit).
+
 * 0.6:
 
   * New ``user_recovers_password`` signal (José Sazo).
