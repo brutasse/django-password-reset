@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-23 10:01+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms.py:26
+msgid "Username"
+msgstr "用户名"
+
+#: forms.py:27
+msgid "Email"
+msgstr "邮箱"
+
+#: forms.py:28
+msgid "Username or Email"
+msgstr "用户名或者邮箱"
+
+#: forms.py:48 forms.py:58 forms.py:70
+msgid "Sorry, this user doesn't exist."
+msgstr "抱歉,用户名不存在."
+
+#: forms.py:72
+msgid "Unable to find user."
+msgstr "找不到指定用户"
+
+#: forms.py:78
+msgid "New password"
+msgstr "新密码"
+
+#: forms.py:82
+msgid "New password (confirm)"
+msgstr "新密码(确认)"
+
+#: forms.py:94
+msgid "The two passwords didn't match."
+msgstr "两次输入的密码不一致"
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "设置新密码"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "您的密码已经重设成功,现在可以登录了."
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "您好 %(username)s,"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr "您或者其它的人在 %(domain)s 申请了密码重置."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "您可以通过以下链接重置密码:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "如果您不想重设密码，可以忽略此邮箱."
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "在 %(domain)s 上重设密码"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "重新设置密码"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "重设密码"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr "抱歉，链接已经失效，您可以在 <a href=""\"%(recovery_url)s\">请求一个新链接</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "您好，<strong>%(username)s</strong>. 请输入您的新密码."
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "设置新密码"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "发送重设密码"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr "已经在%(ago)s以前向您的邮箱 <strong>%(email)s</strong>发送了邮件,根据邮件提示重新设置您的新密码."
