@@ -27,7 +27,10 @@ class PasswordRecoveryForm(forms.Form):
             'email': _('Email'),
             'both': _('Username or Email'),
         }
-        if len(search_fields) == 1:
+        User = get_user_model()  # noqa
+        if getattr(User, 'USERNAME_FIELD', 'username') == 'email':
+            self.label_key = 'email'
+        elif len(search_fields) == 1:
             self.label_key = search_fields[0]
         else:
             self.label_key = 'both'
@@ -43,7 +46,7 @@ class PasswordRecoveryForm(forms.Form):
         key = 'username__%sexact' % ('' if self.case_sensitive else 'i')
         User = get_user_model()
         try:
-            user = User.objects.get(**{key: username})
+            user = User._default_manager.get(**{key: username})
         except User.DoesNotExist:
             raise forms.ValidationError(_("Sorry, this user doesn't exist."))
         return user
@@ -53,7 +56,7 @@ class PasswordRecoveryForm(forms.Form):
         key = 'email__%sexact' % ('' if self.case_sensitive else 'i')
         User = get_user_model()
         try:
-            user = User.objects.get(**{key: email})
+            user = User._default_manager.get(**{key: email})
         except User.DoesNotExist:
             raise forms.ValidationError(_("Sorry, this user doesn't exist."))
         return user
@@ -65,7 +68,7 @@ class PasswordRecoveryForm(forms.Form):
         filters = f('username') | f('email')
         User = get_user_model()
         try:
-            user = User.objects.get(filters)
+            user = User._default_manager.get(filters)
         except User.DoesNotExist:
             raise forms.ValidationError(_("Sorry, this user doesn't exist."))
         except User.MultipleObjectsReturned:
@@ -96,6 +99,6 @@ class PasswordResetForm(forms.Form):
 
     def save(self):
         self.user.set_password(self.cleaned_data['password1'])
-        get_user_model().objects.filter(pk=self.user.pk).update(
+        get_user_model()._default_manager.filter(pk=self.user.pk).update(
             password=self.user.password,
         )

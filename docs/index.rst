@@ -28,6 +28,11 @@ Contents:
 Changelog
 ---------
 
+* 0.6.1:
+
+  * Fix for custom user models without any field named ``username``.
+    Properly take ``USERNAME_FIELD`` into account.
+
 * 0.6:
 
   * New ``user_recovers_password`` signal (José Sazo).

@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.views import generic
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
-from .utils import get_user_model
+from .utils import get_user_model, get_username
 from .signals import user_recovers_password
 
 
@@ -74,6 +74,7 @@ class Recover(SaltMixin, generic.FormView):
         context = {
             'site': RequestSite(self.request),
             'user': self.user,
+            'username': get_username(self.user),
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
@@ -133,7 +134,7 @@ class Reset(SaltMixin, generic.FormView):
         ctx = super(Reset, self).get_context_data(**kwargs)
         if 'invalid' not in ctx:
             ctx.update({
-                'username': self.user.username,
+                'username': get_username(self.user),
                 'token': self.kwargs['token'],
             })
         return ctx

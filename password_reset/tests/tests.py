@@ -4,13 +4,40 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.utils import timezone
+from django.utils.unittest import SkipTest
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 from ..utils import get_user_model
 
+if django.VERSION >= (1, 5):
+    from django.contrib.auth.tests.custom_user import (  # noqa
+        CustomUser, ExtensionUser)
+else:
+    CustomUser = None  # noqa
+    ExtensionUser = None  # noqa
+
+
+def creation_args():
+    args = {
+        'default': ['foo', 'bar@example.com', 'pass'],
+        'custom': ['bar@example.com', timezone.now(), 'pass'],
+        'extension': ['foo', 'bar@example.com', 'pass', timezone.now()],
+    }
+    model = get_user_model()
+    if model is CustomUser:
+        return args['custom']
+    if model is ExtensionUser:
+        return args['extension']
+    return args['default']
+
 
 class FormTests(TestCase):
     def test_username_input(self):
+        User = get_user_model()
+        if User is CustomUser:
+            raise SkipTest('No username field')
+
         form = PasswordRecoveryForm()
         self.assertFalse(form.is_valid())
 
@@ -19,7 +46,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        get_user_model().objects.create_user('foo', 'bar@example.com', 'pass')
+        get_user_model()._default_manager.create_user(*creation_args())
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'foo',
@@ -69,8 +96,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        user = get_user_model().objects.create_user('test@example.com',
-                                                    'foo@example.com', 'pass')
+        user = get_user_model()._default_manager.create_user(*creation_args())
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'test@example.com',
@@ -81,9 +107,12 @@ class FormTests(TestCase):
 
         # Search by actual email works
         form = PasswordRecoveryForm(data={
-            'username_or_email': 'foo@example.com',
+            'username_or_email': 'bar@example.com',
         }, search_fields=['email'])
-        self.assertTrue(form.is_valid())
+        self.assertTrue(form.is_valid(), form.errors)
+
+        if not hasattr(user, 'username'):
+            return  # skip if no username field
 
         # Now search by username
         user.username = 'username'
@@ -102,8 +131,7 @@ class FormTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_password_reset_form(self):
-        user = get_user_model().objects.create_user('foo', 'bar@example.com',
-                                                    'pass')
+        user = get_user_model()._default_manager.create_user(*creation_args())
         old_sha = user.password
 
         form = PasswordResetForm(user=user)
@@ -129,24 +157,38 @@ class FormTests(TestCase):
 
 if django.VERSION >= (1, 5):
     CustomFormTests = override_settings(
-        AUTH_USER_MODEL='tests.User')(FormTests)
+        AUTH_USER_MODEL='auth.CustomUser')(FormTests)
+
+    OtherCustomFormTests = override_settings(
+        AUTH_USER_MODEL='auth.ExtensionUser')(FormTests)
 
 
 class ViewTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(
-            'foo', 'bar@example.com', 'test')
+        self.user = get_user_model()._default_manager.create_user(
+            *creation_args())
 
     def test_recover(self):
         url = reverse('password_reset_recover')
         response = self.client.get(url)
-        self.assertContains(response, 'Username or Email')
+        User = get_user_model()
 
-        response = self.client.post(url, {'username_or_email': 'test'})
+        if User is CustomUser:
+            self.assertContains(response, 'Email')
+        else:
+            self.assertContains(response, 'Username or Email')
+
+        response = self.client.post(url,
+                                    {'username_or_email': 'test@example.com'})
         self.assertContains(response, "Sorry, this user")
 
         self.assertEqual(len(mail.outbox), 0)
-        response = self.client.post(url, {'username_or_email': 'foo'},
+
+        if User is CustomUser:
+            value = 'bar@example.com'
+        else:
+            value = 'foo'
+        response = self.client.post(url, {'username_or_email': value},
                                     follow=True)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertContains(response, 'bar@example.com')
@@ -158,13 +200,20 @@ class ViewTests(TestCase):
         self.assertEqual(message.subject,
                          u'Password recovery on testserver')
 
-        self.assertTrue('Dear foo,' in message.body)
+        if User is CustomUser:
+            self.assertTrue('Dear bar@example.com,' in message.body)
+        else:
+            self.assertTrue('Dear foo,' in message.body)
 
         url = message.body.split('http://testserver')[1].split('\n', 1)[0]
 
         response = self.client.get(url)
         self.assertContains(response, 'New password (confirm)')
-        self.assertContains(response, 'Hi, <strong>foo</strong>')
+        if User is CustomUser:
+            self.assertContains(response,
+                                'Hi, <strong>bar@example.com</strong>')
+        else:
+            self.assertContains(response, 'Hi, <strong>foo</strong>')
 
         data = {'password1': 'foo',
                 'password2': 'foo'}
@@ -173,7 +222,8 @@ class ViewTests(TestCase):
         self.assertContains(response,
                             "Your password has successfully been reset.")
 
-        self.assertTrue(get_user_model().objects.get().check_password('foo'))
+        self.assertTrue(
+            get_user_model()._default_manager.get().check_password('foo'))
 
     def test_invalid_reset_link(self):
         url = reverse('password_reset_reset', args=['foobar-invalid'])
@@ -206,6 +256,8 @@ class ViewTests(TestCase):
         self.assertContains(response, 'bar@example.com')
 
     def test_username_recover(self):
+        if get_user_model() is CustomUser:
+            raise SkipTest("No username field")
         url = reverse('username_recover')
         response = self.client.get(url)
 
@@ -231,31 +283,41 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_content_redirection(self):
-        url = reverse('username_recover')
+        url = reverse('email_recover')
         response = self.client.get(url)
 
         response = self.client.post(
-            url, {'username_or_email': 'foo'}, follow=True,
+            url, {'username_or_email': 'bar@example.com'}, follow=True,
         )
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(len(response.redirect_chain), 1)
-        self.assertContains(response, '<strong>foo</strong>')
-        url = reverse('email_recover')
+        self.assertContains(response, '<strong>bar@example.com</strong>')
+
+        if get_user_model() is CustomUser:
+            return  # no username field
+
+        url = reverse('username_recover')
         response = self.client.post(
-            url, {'username_or_email': 'bar@example.com'}, follow=True,
+            url, {'username_or_email': 'foo'}, follow=True,
         )
         self.assertEqual(len(mail.outbox), 2)
         self.assertEqual(len(response.redirect_chain), 1)
-        self.assertContains(response, '<strong>bar@example.com</strong>')
+        self.assertContains(response, '<strong>foo</strong>')
 
     def test_insensitive_recover(self):
         url = reverse('insensitive_recover')
         response = self.client.get(url)
         normalized = '<strong>bar@example.com</strong>'
 
-        self.assertContains(response, 'Username or Email')
+        User = get_user_model()
+        if User is CustomUser:
+            self.assertContains(response, 'Email')
+        else:
+            self.assertContains(response, 'Username or Email')
         self.assertEqual(len(mail.outbox), 0)
-        response = self.client.post(url, {'username_or_email': 'FOO'},
+
+        value = 'BAR@example.COM' if User is CustomUser else 'FOO'
+        response = self.client.post(url, {'username_or_email': value},
                                     follow=True)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(len(response.redirect_chain), 1)
@@ -277,4 +339,7 @@ class ViewTests(TestCase):
 
 if django.VERSION >= (1, 5):
     CustomViewTests = override_settings(
-        AUTH_USER_MODEL='tests.User')(ViewTests)
+        AUTH_USER_MODEL='auth.CustomUser')(ViewTests)
+
+    OtherCustomViewTests = override_settings(
+        AUTH_USER_MODEL='auth.ExtensionUser')(ViewTests)
