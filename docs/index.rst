@@ -28,6 +28,11 @@ Contents:
 Changelog
 ---------
 
+* 0.7:
+
+  * Return user instance in ``PasswordResetForm.save()``, add ``commit``
+    keyword argument.
+
 * 0.6.1:
 
   * Fix for custom user models without any field named ``username``.

@@ -97,8 +97,10 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError(_("The two passwords didn't match."))
         return password2
 
-    def save(self):
+    def save(self, commit=True):
         self.user.set_password(self.cleaned_data['password1'])
-        get_user_model()._default_manager.filter(pk=self.user.pk).update(
-            password=self.user.password,
-        )
+        if commit:
+            get_user_model()._default_manager.filter(pk=self.user.pk).update(
+                password=self.user.password,
+            )
+        return self.user

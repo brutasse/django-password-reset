@@ -18,21 +18,36 @@ else:
     ExtensionUser = None  # noqa
 
 
-def creation_args():
-    args = {
-        'default': ['foo', 'bar@example.com', 'pass'],
-        'custom': ['bar@example.com', timezone.now(), 'pass'],
-        'extension': ['foo', 'bar@example.com', 'pass', timezone.now()],
-    }
+class CustomUserVariants(type):
+    def __new__(cls, name, bases, dct):
+        if django.VERSION >= (1, 5):
+            for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
+                suffix = custom_user.lower().replace('.', '_')
+                for key, fn in dct.items():
+                    if key.startswith('test') and not '_CUSTOM_' in key:
+                        name = '{0}_CUSTOM_{1}'.format(key, suffix)
+                        dct[name] = override_settings(
+                            AUTH_USER_MODEL=custom_user)(fn)
+        return super(CustomUserVariants, cls).__new__(cls, name, bases, dct)
+
+
+def create_user():
+    email = 'bar@example.com'
+    password = 'pass'
+    username = 'foo'
     model = get_user_model()
+    kwargs = {}
+    args = username, email, password
     if model is CustomUser:
-        return args['custom']
-    if model is ExtensionUser:
-        return args['extension']
-    return args['default']
+        args = email, timezone.now(), password
+    elif model is ExtensionUser:
+        kwargs = {'date_of_birth': timezone.now()}
+    return get_user_model()._default_manager.create_user(*args, **kwargs)
 
 
 class FormTests(TestCase):
+    __metaclass__ = CustomUserVariants
+
     def test_username_input(self):
         User = get_user_model()
         if User is CustomUser:
@@ -46,7 +61,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        get_user_model()._default_manager.create_user(*creation_args())
+        create_user()
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'foo',
@@ -96,7 +111,7 @@ class FormTests(TestCase):
         self.assertEqual(form.errors['username_or_email'],
                          ["Sorry, this user doesn't exist."])
 
-        user = get_user_model()._default_manager.create_user(*creation_args())
+        user = create_user()
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'test@example.com',
@@ -131,7 +146,7 @@ class FormTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_password_reset_form(self):
-        user = get_user_model()._default_manager.create_user(*creation_args())
+        user = create_user()
         old_sha = user.password
 
         form = PasswordResetForm(user=user)
@@ -155,20 +170,27 @@ class FormTests(TestCase):
         form.save()
         self.assertNotEqual(user.password, old_sha)
 
-if django.VERSION >= (1, 5):
-    CustomFormTests = override_settings(
-        AUTH_USER_MODEL='auth.CustomUser')(FormTests)
+    def test_form_commit(self):
+        user = create_user()
+        old_sha = user.password
 
-    OtherCustomFormTests = override_settings(
-        AUTH_USER_MODEL='auth.ExtensionUser')(FormTests)
+        form = PasswordResetForm(user=user, data={'password1': 'foo',
+                                                  'password2': 'foo'})
+        self.assertTrue(form.is_valid())
+        user = form.save(commit=False)
+        self.assertEqual(get_user_model()._default_manager.get().password,
+                         old_sha)
+        self.assertNotEqual(old_sha, user.password)
+        user.save()
+        self.assertEqual(get_user_model()._default_manager.get().password,
+                         user.password)
 
 
 class ViewTests(TestCase):
-    def setUp(self):
-        self.user = get_user_model()._default_manager.create_user(
-            *creation_args())
+    __metaclass__ = CustomUserVariants
 
     def test_recover(self):
+        self.user = create_user()
         url = reverse('password_reset_recover')
         response = self.client.get(url)
         User = get_user_model()
@@ -233,6 +255,7 @@ class ViewTests(TestCase):
                             "Sorry, this password reset link is invalid")
 
     def test_email_recover(self):
+        self.user = create_user()
         url = reverse('email_recover')
         response = self.client.get(url)
         self.assertNotContains(response, "Username or Email")
@@ -258,6 +281,7 @@ class ViewTests(TestCase):
     def test_username_recover(self):
         if get_user_model() is CustomUser:
             raise SkipTest("No username field")
+        self.user = create_user()
         url = reverse('username_recover')
         response = self.client.get(url)
 
@@ -283,6 +307,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_content_redirection(self):
+        self.user = create_user()
         url = reverse('email_recover')
         response = self.client.get(url)
 
@@ -305,6 +330,7 @@ class ViewTests(TestCase):
         self.assertContains(response, '<strong>foo</strong>')
 
     def test_insensitive_recover(self):
+        self.user = create_user()
         url = reverse('insensitive_recover')
         response = self.client.get(url)
         normalized = '<strong>bar@example.com</strong>'
@@ -336,10 +362,3 @@ class ViewTests(TestCase):
         self.assertEqual(len(mail.outbox), 3)
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertContains(response, normalized)
-
-if django.VERSION >= (1, 5):
-    CustomViewTests = override_settings(
-        AUTH_USER_MODEL='auth.CustomUser')(ViewTests)
-
-    OtherCustomViewTests = override_settings(
-        AUTH_USER_MODEL='auth.ExtensionUser')(ViewTests)
