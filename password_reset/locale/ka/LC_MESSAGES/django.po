@@ -1,0 +1,133 @@
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Givi Khojanashvili <gigovich@gmail.com>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-18 14:11+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Givi Khojanashvili <gigovich@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: forms.py:26
+msgid "Username"
+msgstr "სახელი"
+
+#: forms.py:27
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:28
+msgid "Username or Email"
+msgstr "სახელი ან Email-ი"
+
+#: forms.py:51 forms.py:61 forms.py:73
+msgid "Sorry, this user doesn't exist."
+msgstr "ბოდიში, ასეთი მომხმარებელი არ არსებობს."
+
+#: forms.py:75
+msgid "Unable to find user."
+msgstr "შეუძლებელია მომხმარებელის მოძებნა"
+
+#: forms.py:81
+msgid "New password"
+msgstr "ახალი პაროლი"
+
+#: forms.py:85
+msgid "New password (confirm)"
+msgstr "ახალი პაროლი (დამოწმება)"
+
+#: forms.py:97
+msgid "The two passwords didn't match."
+msgstr "ორი პაროლი არ ემთხვევა ერთმანეთს."
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "ახალი პაროლი დაყენებულია"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr ""
+"თქვენი პაროლი იყო წარმატებულად შეცვლილი. თქვენ შეგიძლიათ ის ეხლავე მოიხმაროთ ავტორიზირების გვერდზე"
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "%(username)s,"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr ""
+"თქვენ -- ან ვინმემ თქვენი სახელით -- მოითხოვეთ პაროლის შეცვლა "
+"%(domain)s-ზე."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "გადადით შემდეგ ლინკზე და შეძლებთ ახალი პაროლის დაყენებას:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr ""
+"თუ თქვენ არ გსურთ პაროლის შეცვლა ნუ მიაქცევთ ყურადღებას ამ email-ს და "
+"თქვენი პაროლი უცვლელი დარჩება"
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "პაროლის აღდგენა %(domain)s-ზე"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "პაროლის აღდგენა"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "ავღადგინო ჩემი პაროლი"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+"ბოდიში, პაროლის შეცვლის ლინკი არასწორია. თქვენ ისევ შეგიძლიად <a href="
+"\"%(recovery_url)s\">ახალი მოითხოვოთ</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "გამარჯობა, <strong>%(username)s</strong>. გთხოვთ ამოირჩიეთ თქვენი "
+"ახალი პაროლი"
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "დავაყენო ახალი პაროლი"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "პაროლის აღდგენის მოთხოვნა გაგზავნილია"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr ""
+"email-ი <strong>%(email)s</strong>-ზე იყო გაგზავნილი %(ago)s წინ. მოიხმარეთ ეს "
+"ლინკი იმისათვის რომ დააყენოთ ახალი პაროლი"
