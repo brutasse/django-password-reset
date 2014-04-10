@@ -50,13 +50,14 @@ recover_done = RecoverDone.as_view()
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
+    success_url_name = 'password_reset_sent'
     template_name = 'password_reset/recovery_form.html'
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
 
     def get_success_url(self):
-        return reverse('password_reset_sent', args=[self.mail_signature])
+        return reverse(self.success_url_name, args=[self.mail_signature])
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
