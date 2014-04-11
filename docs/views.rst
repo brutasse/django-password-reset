@@ -33,6 +33,10 @@ Attributes
 * ``form_class``: the form to use for validating the user. Default:
   ``password_reset.forms.PasswordRecoveryForm``.
 
+* ``success_url_name``: the name of the URL to redirect to after sending the
+  recovery email. Change it if you don't use the provided URLconf. Defaults to
+  ``password_reset_sent``.
+
 * ``template_name``: defaults to ``password_reset/recovery_form.html``.
 
 * ``email_template_name``: the template to use for sending the reset link by
