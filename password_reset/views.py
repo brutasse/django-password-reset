@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.models import Site, RequestSite
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -50,8 +50,8 @@ recover_done = RecoverDone.as_view()
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
-    success_url_name = 'password_reset_sent'
     template_name = 'password_reset/recovery_form.html'
+    success_url_name = 'password_reset_sent'
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
@@ -71,9 +71,15 @@ class Recover(SaltMixin, generic.FormView):
         })
         return kwargs
 
+    def get_site(self):
+        if Site._meta.installed:
+            return Site.objects.get_current()
+        else:
+            return RequestSite(self.request)
+
     def send_notification(self):
         context = {
-            'site': RequestSite(self.request),
+            'site': self.get_site(),
             'user': self.user,
             'username': get_username(self.user),
             'token': signing.dumps(self.user.pk, salt=self.salt),

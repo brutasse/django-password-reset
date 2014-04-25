@@ -56,6 +56,11 @@ Methods
 * ``send_notification()``: this builds the email context, loads the template
   and sends the password reset email.
 
+* ``get_site()``: method to obtain the website's host name.  This method first 
+checks and sets the site from the optional `Django sites framework 
+<https://docs.djangoproject.com/en/dev/ref/contrib/sites/>`_.  If missing, it 
+will deduce the domain and name by looking at the request object's domain.
+
 RecoverDone
 -----------
 
