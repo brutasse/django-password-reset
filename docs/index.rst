@@ -28,12 +28,12 @@ Contents:
 Changelog
 ---------
 
-* 0.7:
+* 0.7 (2014-02-18):
 
   * Return user instance in ``PasswordResetForm.save()``, add ``commit``
     keyword argument.
 
-* 0.6.1:
+* 0.6.1 (2014-02-14):
 
   * Fix for custom user models without any field named ``username``.
     Properly take ``USERNAME_FIELD`` into account.
@@ -42,19 +42,19 @@ Changelog
 
   * Add Chinese translation (GitHub user saggit).
 
-* 0.6:
+* 0.6 (2013-12-15):
 
   * New ``user_recovers_password`` signal (José Sazo).
 
-* 0.5.1:
+* 0.5.1 (2013-10-31):
 
   * Spanish, Polish and Russian translations.
 
-* 0.5:
+* 0.5 (2013-05-19):
 
   * Support for Django 1.5's custom user model.
 
-* 0.4:
+* 0.4 (2013-02-18):
 
   * Python3 and Django 1.5 support.
 
