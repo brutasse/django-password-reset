@@ -33,6 +33,10 @@ Changelog
   * Allow customizing form error message via the ``error_messages`` attribute
     on form classes.
 
+  * Add Georgian translation (GitHub user  gigovich).
+
+  * Add Norwegian translation (GitHub user gunnaringe).
+
 * 0.7 (2014-02-18):
 
   * Return user instance in ``PasswordResetForm.save()``, add ``commit``
