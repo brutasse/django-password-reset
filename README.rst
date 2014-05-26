@@ -1,7 +1,7 @@
 Django-password-reset
 =====================
 
-.. image:: https://travis-ci.org/brutasse/django-password-reset.png?branch=master
+.. image:: https://travis-ci.org/brutasse/django-password-reset.svg?branch=master
    :alt: Build Status
    :target: https://travis-ci.org/brutasse/django-password-reset
 
