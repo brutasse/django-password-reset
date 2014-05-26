@@ -24,7 +24,7 @@ class CustomUserVariants(type):
             for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
                 suffix = custom_user.lower().replace('.', '_')
                 for key, fn in dct.items():
-                    if key.startswith('test') and not '_CUSTOM_' in key:
+                    if key.startswith('test') and '_CUSTOM_' not in key:
                         name = '{0}_CUSTOM_{1}'.format(key, suffix)
                         dct[name] = override_settings(
                             AUTH_USER_MODEL=custom_user)(fn)
