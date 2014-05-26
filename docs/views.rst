@@ -31,7 +31,8 @@ Attributes
   data. Default: ``True``.
 
 * ``form_class``: the form to use for validating the user. Default:
-  ``password_reset.forms.PasswordRecoveryForm``.
+  ``password_reset.forms.PasswordRecoveryForm``. To customize form error
+  messages, subclass the form and override the ``error_messages`` attribute.
 
 * ``template_name``: defaults to ``password_reset/recovery_form.html``.
 
@@ -80,7 +81,9 @@ Reset
 Attributes
 ``````````
 
-* ``form_class``: defaults to ``password_reset.forms.PasswordResetForm``.
+* ``form_class``: defaults to ``password_reset.forms.PasswordResetForm``. To
+  customize form error messages, subclass the form and override the
+  ``error_messages`` attribute.
 
 * ``token_expires``: expiration time (in seconds) of the password reset token.
   Default is two days.

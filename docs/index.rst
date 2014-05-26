@@ -28,6 +28,11 @@ Contents:
 Changelog
 ---------
 
+* 0.8 (not released yet):
+
+  * Allow customizing form error message via the ``error_messages`` attribute
+    on form classes.
+
 * 0.7 (2014-02-18):
 
   * Return user instance in ``PasswordResetForm.save()``, add ``commit``
