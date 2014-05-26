@@ -34,6 +34,10 @@ Attributes
   ``password_reset.forms.PasswordRecoveryForm``. To customize form error
   messages, subclass the form and override the ``error_messages`` attribute.
 
+* ``success_url_name``: the name of the URL to redirect to after sending the
+  recovery email. Change it if you don't use the provided URLconf. Defaults to
+  ``password_reset_sent``.
+
 * ``template_name``: defaults to ``password_reset/recovery_form.html``.
 
 * ``email_template_name``: the template to use for sending the reset link by
@@ -52,6 +56,11 @@ Methods
 
 * ``send_notification()``: this builds the email context, loads the template
   and sends the password reset email.
+
+* ``get_site()``: method to obtain the website's host name.  This method first 
+checks and sets the site from the optional `Django sites framework 
+<https://docs.djangoproject.com/en/dev/ref/contrib/sites/>`_.  If missing, it 
+will deduce the domain and name by looking at the request object's domain.
 
 RecoverDone
 -----------
