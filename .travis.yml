@@ -1,9 +1,5 @@
 language: python
 python: "3.4"
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
 env:
   - TOXENV=py26-1.4
   - TOXENV=py26-1.5
