@@ -86,22 +86,22 @@ msgstr "Если вы не хотете сбрасывать ваш пароль
 #: templates/password_reset/recovery_email_subject.txt:1
 #, python-format
 msgid "Password recovery on %(domain)s"
-msgstr "Востановление пароля на сайте %(domain)s"
+msgstr "Восстановление пароля на сайте %(domain)s"
 
 #: templates/password_reset/recovery_form.html:5
 msgid "Password recovery"
-msgstr "Воставновление пароля"
+msgstr "Восстановление пароля"
 
 #: templates/password_reset/recovery_form.html:11
 msgid "Recover my password"
-msgstr "Востановить пароль"
+msgstr "Восстановить пароль"
 
 #: templates/password_reset/reset.html:5
 #, python-format
 msgid ""
 "Sorry, this password reset link is invalid. You can still <a href="
 "\"%(recovery_url)s\">request a new one</a>."
-msgstr "Извините, эта ссылка для востановление пароля неверная, вы можете <a href="
+msgstr "Извините, эта ссылка для восстановление пароля неверная, вы можете <a href="
 "\"%(recovery_url)s\">сделать новый запрос</a>."
 
 #: templates/password_reset/reset.html:7
@@ -115,11 +115,11 @@ msgstr "Установить новый пароль"
 
 #: templates/password_reset/reset_sent.html:4
 msgid "Password recovery sent"
-msgstr "Запрос на востановление пароля отправлен"
+msgstr "Запрос на восстановление пароля отправлен"
 
 #: templates/password_reset/reset_sent.html:7
 #, python-format
 msgid ""
 "An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
 "it to set a new password."
-msgstr "Письмо с инструкциями по востановлению пароля было отправлено на <strong>%(email)s</strong> %(ago)s назад"
+msgstr "Письмо с инструкциями по восстановлению пароля было отправлено на <strong>%(email)s</strong> %(ago)s назад"
