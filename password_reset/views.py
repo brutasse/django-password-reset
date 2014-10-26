@@ -86,11 +86,16 @@ class Recover(SaltMixin, generic.FormView):
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
-        text_content = loader.render_to_string(self.email_template_name, context).strip()
-        html_content = loader.render_to_string(self.email_html_template_name, context).strip()
-        subject = loader.render_to_string(self.email_subject_template_name, context).strip()
+        text_content = loader.render_to_string(
+            self.email_template_name, context).strip()
+        html_content = loader.render_to_string(
+            self.email_html_template_name, context).strip()
+        subject = loader.render_to_string(
+            self.email_subject_template_name, context).strip()
 
-        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.user.email, ])
+        msg = EmailMultiAlternatives(
+            subject, text_content,
+            settings.DEFAULT_FROM_EMAIL, [self.user.email, ])
         msg.attach_alternative(html_content, 'text/html')
 
         msg.send()
