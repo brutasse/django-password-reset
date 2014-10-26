@@ -43,6 +43,10 @@ Attributes
 * ``email_template_name``: the template to use for sending the reset link by
   email. Default: ``password_reset/recovery_email.txt``.
 
+* ``email_html_template_name``: the HTML template to use for sending the reset link by
+  email. The content of this template will be sent as the text/html content type alternative.
+  Default: ``password_reset/recovery_email.html``.
+
 * ``email_subject_template_name``: the template to use for generating the
   email subject. Defaults to ``password_reset/recovery_email_subject.txt``.
 

@@ -275,6 +275,8 @@ class ViewTests(TestCase):
             url, {'username_or_email': 'bar@example.com'}, follow=True,
         )
         self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox[0].alternatives), 1)
+        self.assertEqual(mail.outbox[0].alternatives[0][1], 'text/html')
         self.assertEqual(len(response.redirect_chain), 1)
         self.assertContains(response, 'bar@example.com')
 
