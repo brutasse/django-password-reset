@@ -172,7 +172,7 @@
                 </tr>
                 <tr id="id_footer">
                     <td>
-                        <a href="http://{{ site.domain }}">{% blocktrans with site_name=site.name %}Go to {{ site_name }}{% endblocktrans %}</a>
+                        <a href="http{% if secure %}s{% endif %}{{ site.domain }}">{% blocktrans with site_name=site.name %}Go to {{ site_name }}{% endblocktrans %}</a>
                     </td>
                 </tr>
             </table> 
