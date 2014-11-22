@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.unittest import SkipTest
-from django.conf import settings
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 from ..utils import get_user_model
@@ -105,19 +104,16 @@ class FormTests(TestCase):
             self.assertTrue(form.is_valid(),
                             'Password from inactive should be recovered')
 
-            settings.RECOVER_ONLY_ACTIVE_USERS = True
+            with self.settings(RECOVER_ONLY_ACTIVE_USERS=True):
+                form = PasswordRecoveryForm(data={
+                    'username_or_email': user.email})
+                self.assertFalse(form.is_valid(),
+                                 'Password from inactive user should '
+                                 'not be recovered')
 
-            form = PasswordRecoveryForm(data={'username_or_email': user.email})
-            self.assertFalse(form.is_valid(),
-                             'Password from inactive user should '
-                             'not be recovered')
-
-            self.assertEquals(form.errors['username_or_email'],
-                              [u"Sorry, this user is inactive and his "
-                              "password can't be recovered."])
-
-            # tear down settings
-            del settings.RECOVER_ONLY_ACTIVE_USERS
+                self.assertEqual(form.errors['username_or_email'],
+                                 [u"Sorry, inactive users can't recover "
+                                 "their password."])
 
     def test_form_custom_search(self):
         # Searching only for email does some extra validation

@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from .utils import get_user_model
 
@@ -45,15 +46,14 @@ class PasswordRecoveryForm(forms.Form):
         cleaner = getattr(self, 'get_user_by_%s' % self.label_key)
         self.cleaned_data['user'] = user = cleaner(username)
 
-        from django.conf import settings
+        user_is_active = getattr(user, 'is_active', True)
         recovery_only_active_users = getattr(settings,
                                              'RECOVER_ONLY_ACTIVE_USERS',
                                              False)
 
-        if recovery_only_active_users and \
-           hasattr(user, 'is_active') and not user.is_active:
-            raise forms.ValidationError(_("Sorry, this user is inactive and "
-                                          "his password can't be recovered."))
+        if recovery_only_active_users and not user_is_active:
+            raise forms.ValidationError(_("Sorry, inactive users can't "
+                                        "recover their password."))
 
         return username
 
