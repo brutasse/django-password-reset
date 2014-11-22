@@ -45,7 +45,12 @@ class PasswordRecoveryForm(forms.Form):
         cleaner = getattr(self, 'get_user_by_%s' % self.label_key)
         self.cleaned_data['user'] = user = cleaner(username)
 
-        if hasattr(user, 'is_active') and not user.is_active:
+        from django.conf import settings
+        recovery_only_active_users = getattr(settings,\
+            'RECOVER_ONLY_ACTIVE_USERS', False)
+
+        if recovery_only_active_users and \
+           hasattr(user, 'is_active') and not user.is_active:
             raise forms.ValidationError(_("Sorry, this user is inactive and "
                                           "his password can't be recovered."))
 
