@@ -43,7 +43,12 @@ class PasswordRecoveryForm(forms.Form):
     def clean_username_or_email(self):
         username = self.cleaned_data['username_or_email']
         cleaner = getattr(self, 'get_user_by_%s' % self.label_key)
-        self.cleaned_data['user'] = cleaner(username)
+        self.cleaned_data['user'] = user = cleaner(username)
+
+        if hasattr(user, 'is_active') and not user.is_active:
+            raise forms.ValidationError(_("Sorry, this user is inactive and "
+                                          "his password can't be recovered."))
+
         return username
 
     def get_user_by_username(self, username):
@@ -80,6 +85,7 @@ class PasswordRecoveryForm(forms.Form):
                                         code='not_found')
         except User.MultipleObjectsReturned:
             raise forms.ValidationError(_("Unable to find user."))
+
         return user
 
 

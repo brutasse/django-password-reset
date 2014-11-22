@@ -93,6 +93,20 @@ class FormTests(TestCase):
         }, case_sensitive=False)
         self.assertTrue(form.is_valid())
 
+    def test_error_if_user_is_inactive(self):
+        user = create_user()
+
+        if hasattr(user, 'is_active'):
+            user.is_active = False
+            user.save()
+
+            form = PasswordRecoveryForm(data={'username_or_email': user.email})
+
+            self.assertFalse(form.is_valid(), 'Password from inactive user should not be recovered')
+
+            self.assertItemsEqual(form.errors['username_or_email'],
+                [u"Sorry, this user is inactive and his password can't be recovered."])
+
     def test_form_custom_search(self):
         # Searching only for email does some extra validation
         form = PasswordRecoveryForm(data={
