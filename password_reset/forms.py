@@ -46,8 +46,9 @@ class PasswordRecoveryForm(forms.Form):
         self.cleaned_data['user'] = user = cleaner(username)
 
         from django.conf import settings
-        recovery_only_active_users = getattr(settings,\
-            'RECOVER_ONLY_ACTIVE_USERS', False)
+        recovery_only_active_users = getattr(settings,
+                                             'RECOVER_ONLY_ACTIVE_USERS',
+                                             False)
 
         if recovery_only_active_users and \
            hasattr(user, 'is_active') and not user.is_active:

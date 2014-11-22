@@ -94,7 +94,7 @@ class FormTests(TestCase):
         }, case_sensitive=False)
         self.assertTrue(form.is_valid())
 
-    def test_raise_error_if_user_is_inactive_and_settings_doesnt_allow_inactive_password_recovery(self):
+    def test_inactive_user_password_recovery(self):
         user = create_user()
 
         if hasattr(user, 'is_active'):
@@ -102,19 +102,22 @@ class FormTests(TestCase):
             user.save()
 
             form = PasswordRecoveryForm(data={'username_or_email': user.email})
-            self.assertTrue(form.is_valid(), 'Password from inactive should be recovered')
+            self.assertTrue(form.is_valid(),
+                            'Password from inactive should be recovered')
 
             settings.RECOVER_ONLY_ACTIVE_USERS = True
 
             form = PasswordRecoveryForm(data={'username_or_email': user.email})
-            self.assertFalse(form.is_valid(), 'Password from inactive user should not be recovered')
+            self.assertFalse(form.is_valid(),
+                             'Password from inactive user should '
+                             'not be recovered')
 
             self.assertItemsEqual(form.errors['username_or_email'],
-                [u"Sorry, this user is inactive and his password can't be recovered."])
+                                  [u"Sorry, this user is inactive and his "
+                                  "password can't be recovered."])
 
             # tear down settings
             del settings.RECOVER_ONLY_ACTIVE_USERS
-
 
     def test_form_custom_search(self):
         # Searching only for email does some extra validation
