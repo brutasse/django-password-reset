@@ -112,9 +112,9 @@ class FormTests(TestCase):
                              'Password from inactive user should '
                              'not be recovered')
 
-            self.assertItemsEqual(form.errors['username_or_email'],
-                                  [u"Sorry, this user is inactive and his "
-                                  "password can't be recovered."])
+            self.assertEquals(form.errors['username_or_email'],
+                              [u"Sorry, this user is inactive and his "
+                              "password can't be recovered."])
 
             # tear down settings
             del settings.RECOVER_ONLY_ACTIVE_USERS
