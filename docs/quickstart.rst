@@ -43,4 +43,6 @@ What you can do
 
 * Use a custom salt or expiration time for tokens.
 
+* Allow password recovery for all users (default) or only for active users (via `RECOVER_ONLY_ACTIVE_USERS=False` setting)
+
 See the next section.
