@@ -10,7 +10,7 @@ from django.http import Http404
 from django.template import loader
 from django.utils import timezone
 from django.views import generic
-import hashlib
+from django.contrib.auth.hashers import get_hasher
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .utils import get_user_model, get_username
@@ -22,7 +22,7 @@ class SaltMixin(object):
     url_salt = 'password_recovery_url'
 
     def hash_password(self, psw):
-        return hashlib.sha512(psw).hexdigest()
+        return get_hasher().encode(psw, self.salt)
 
 
 def loads_with_timestamp(value, salt):
