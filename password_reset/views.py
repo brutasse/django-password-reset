@@ -21,6 +21,9 @@ class SaltMixin(object):
     salt = 'password_recovery'
     url_salt = 'password_recovery_url'
 
+    def hash_password(self, psw):
+        return hashlib.sha512(psw).hexdigest()
+
 
 def loads_with_timestamp(value, salt):
     """Returns the unsigned value along with its timestamp, the time when it
@@ -83,13 +86,14 @@ class Recover(SaltMixin, generic.FormView):
             'site': self.get_site(),
             'user': self.user,
             'username': get_username(self.user),
-            'token': signing.dumps({
-                                       'pk': self.user.pk,
-                                       'psw': hashlib.sha256(
-                                           self.user.password
-                                       )
-                                   },
-                                   salt=self.salt),
+            'token': signing.dumps(
+                {
+                    'pk': self.user.pk,
+                    'psw': self.hash_password(
+                        self.user.password
+                    )
+                },
+                salt=self.salt),
             'secure': self.request.is_secure(),
         }
         body = loader.render_to_string(self.email_template_name,
@@ -144,7 +148,7 @@ class Reset(SaltMixin, generic.FormView):
 
         # Ensure the hashed password is same to prevent link to be reused
         # TODO: this is assuming the password is changed
-        if password != hashlib.sha256(self.user.password):
+        if password != self.hash_password(self.user.password):
             return self.invalid()
 
         return super(Reset, self).dispatch(request, *args, **kwargs)
