@@ -23,11 +23,11 @@ msgstr "Nom d'utilisateur"
 
 #: forms.py:27
 msgid "Email"
-msgstr "Mel"
+msgstr "Mail"
 
 #: forms.py:28
 msgid "Username or Email"
-msgstr "Nom d'utilisateur ou Mel"
+msgstr "Nom d'utilisateur ou Mail"
 
 #: forms.py:48 forms.py:58 forms.py:70
 msgid "Sorry, this user doesn't exist."
@@ -82,7 +82,7 @@ msgid ""
 "If you don't want to reset your password, simply ignore this email and it "
 "will stay unchanged."
 msgstr "Si vous ne souhaitez pas réinitialiser votre mot de passe,"
-" ignorez cet e-mail, le mot de passe restera inchangé."
+" ignorez ce mail, le mot de passe restera inchangé."
 
 #: templates/password_reset/recovery_email_subject.txt:1
 #, python-format
@@ -124,5 +124,5 @@ msgstr "Protocole  de récupération de mot de passe envoyé"
 msgid ""
 "An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
 "it to set a new password."
-msgstr "Un e-mail a été envoyé à <strong>%(email)s</strong> %(ago)s ago."
+msgstr "Un mail a été envoyé à <strong>%(email)s</strong> il y a  %(ago)s "
 " Cliquez sur le lien fourni pour mettre à jour votre mot de passe."
