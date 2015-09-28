@@ -37,6 +37,8 @@ Changelog
 
   * Add Norwegian translation (GitHub user gunnaringe).
 
+  * Tested on django 1.5 to 1.8 and Python 2.6 to 3.4.
+
 * 0.7 (2014-02-18):
 
   * Return user instance in ``PasswordResetForm.save()``, add ``commit``
