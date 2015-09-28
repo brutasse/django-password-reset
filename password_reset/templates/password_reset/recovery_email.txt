@@ -1,4 +1,4 @@
-{% load i18n %}{% load url from future %}{% blocktrans %}Dear {{ username }},{% endblocktrans %}
+{% load i18n %}{% blocktrans %}Dear {{ username }},{% endblocktrans %}
 
 {% blocktrans with domain=site.domain %}You -- or someone pretending to be you -- has requested a password reset on {{ domain }}.{% endblocktrans %}
 

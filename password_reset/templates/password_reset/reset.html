@@ -1,4 +1,4 @@
-{% extends "password_reset/base.html" %}{% load i18n %}{% load url from future %}
+{% extends "password_reset/base.html" %}{% load i18n %}
 
 {% block content %}
 	{% if invalid %}{% url "password_reset_recover" as recovery_url %}
