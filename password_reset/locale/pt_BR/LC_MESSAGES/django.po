@@ -1,0 +1,131 @@
+# django-password-reset translations for PT.
+# This file is distributed under the same license as the django-password-reset package.
+# Marcos Gabriel Alcazar <marcos.alcazar@gmail.com>, 2013.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-22 12:38-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Eduardo Matos <eduardo.matos.silva@gmail.com>\n"
+"Language-Team: PT <eduardo.matos.silva@gmail.com>\n"
+"Language: PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:26
+msgid "Username"
+msgstr "Usuário"
+
+#: forms.py:27
+msgid "Email"
+msgstr "Email"
+
+#: forms.py:28
+msgid "Username or Email"
+msgstr "Usuário ou Email"
+
+#: forms.py:48 forms.py:58 forms.py:70
+msgid "Sorry, this user doesn't exist."
+msgstr "Desculpe, este usuário não existe."
+
+#: forms.py:72
+msgid "Unable to find user."
+msgstr "Não foi possível encontrar o usuário."
+
+#: forms.py:78
+msgid "New password"
+msgstr "Nova senha"
+
+#: forms.py:82
+msgid "New password (confirm)"
+msgstr "Nova senha (confirmar)"
+
+#: forms.py:94
+msgid "The two passwords didn't match."
+msgstr "As senhas não coincidem."
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Nova senha criada"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr ""
+"Sua senha foi redefinida. Você pode usá-la agora na página de login."
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Querido %(username)s,"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr ""
+"Você -- o alguém se passando por você -- pediu a redefinição da senha em "
+"%(domain)s."
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Você pode redefinir sua senha seguindo este link:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr ""
+"Caso não queira redefinir sua senha, ignore este email e ela "
+"será mantida."
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Recuperação da senha em %(domain)s"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "Recuperação de senha"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "Recuperar sua senha"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+"Desculpe, este link de recuperação de senha é inválido. Você ainda pode <a href="
+"\"%(recovery_url)s\">solicitar novamente</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Olá, <string>%(username)s</strong>. Por favor escolha uma nova senha."
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Escolha uma nova senha"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Recuperação senha enviada"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr ""
+"Um email foi enviado para <strong>%(email)s</strong> há %(ago)s minutos. "
+"Acesso o link para redefinir sua senha."
