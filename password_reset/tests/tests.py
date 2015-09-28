@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
+from django.utils.six import with_metaclass
 from django.utils.unittest import SkipTest
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
@@ -23,7 +24,7 @@ class CustomUserVariants(type):
         if django.VERSION >= (1, 5):
             for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
                 suffix = custom_user.lower().replace('.', '_')
-                for key, fn in dct.items():
+                for key, fn in list(dct.items()):
                     if key.startswith('test') and '_CUSTOM_' not in key:
                         name = '{0}_CUSTOM_{1}'.format(key, suffix)
                         dct[name] = override_settings(
@@ -45,9 +46,7 @@ def create_user():
     return get_user_model()._default_manager.create_user(*args, **kwargs)
 
 
-class FormTests(TestCase):
-    __metaclass__ = CustomUserVariants
-
+class FormTests(with_metaclass(CustomUserVariants, TestCase)):
     def test_username_input(self):
         User = get_user_model()
         if User is CustomUser:
@@ -208,9 +207,7 @@ class FormTests(TestCase):
                          user.password)
 
 
-class ViewTests(TestCase):
-    __metaclass__ = CustomUserVariants
-
+class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
     def test_recover(self):
         self.user = create_user()
         url = reverse('password_reset_recover')

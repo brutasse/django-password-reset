@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.sites.models import Site, RequestSite
+from django.contrib.sites.models import Site
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -10,6 +10,11 @@ from django.http import Http404
 from django.template import loader
 from django.utils import timezone
 from django.views import generic
+
+try:
+    from django.contrib.sites.requests import RequestSite
+except ImportError:
+    from django.contrib.sites.models import RequestSite
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .utils import get_user_model, get_username

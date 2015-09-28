@@ -15,3 +15,16 @@ INSTALLED_APPS = (
     'password_reset',
     'password_reset.tests',
 )
+
+MIGRATION_MODULES = {
+    'auth': 'django.contrib.auth.tests.migrations',
+}
+
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'OPTIONS': {
+        'loaders': (
+            'django.template.loaders.app_directories.Loader',
+        ),
+    },
+}]
