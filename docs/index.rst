@@ -28,7 +28,7 @@ Contents:
 Changelog
 ---------
 
-* 0.8 (not released yet):
+* 0.8 (2015-10-30):
 
   * Allow customizing form error message via the ``error_messages`` attribute
     on form classes.
