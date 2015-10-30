@@ -28,12 +28,16 @@ Contents:
 Changelog
 ---------
 
+* 0.8.1 (2015-10-30):
+
+  * Add pt_BR translation (GitHub user eduardo-matos).
+
 * 0.8 (2015-10-30):
 
   * Allow customizing form error message via the ``error_messages`` attribute
     on form classes.
 
-  * Add Georgian translation (GitHub user  gigovich).
+  * Add Georgian translation (GitHub user gigovich).
 
   * Add Norwegian translation (GitHub user gunnaringe).
 
