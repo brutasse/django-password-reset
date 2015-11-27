@@ -47,11 +47,11 @@ msgstr "Nova senha (confirmar)"
 
 #: forms.py:94
 msgid "The two passwords didn't match."
-msgstr "As senhas não coincidem."
+msgstr "As duas senhas não combinam."
 
 #: templates/password_reset/recovery_done.html:3
 msgid "New password set"
-msgstr "Nova senha criada"
+msgstr "Nova senha definida"
 
 #: templates/password_reset/recovery_done.html:6
 msgid ""
@@ -71,7 +71,7 @@ msgid ""
 "You -- or someone pretending to be you -- has requested a password reset on "
 "%(domain)s."
 msgstr ""
-"Você -- o alguém se passando por você -- pediu a redefinição da senha em "
+"Você -- ou alguém se passando por você -- pediu a redefinição da senha em "
 "%(domain)s."
 
 #: templates/password_reset/recovery_email.txt:5
@@ -97,7 +97,7 @@ msgstr "Recuperação de senha"
 
 #: templates/password_reset/recovery_form.html:11
 msgid "Recover my password"
-msgstr "Recuperar sua senha"
+msgstr "Recuperar minha senha"
 
 #: templates/password_reset/reset.html:5
 #, python-format
@@ -119,7 +119,7 @@ msgstr "Escolha uma nova senha"
 
 #: templates/password_reset/reset_sent.html:4
 msgid "Password recovery sent"
-msgstr "Recuperação senha enviada"
+msgstr "Recuperação de senha enviada"
 
 #: templates/password_reset/reset_sent.html:7
 #, python-format
@@ -127,5 +127,5 @@ msgid ""
 "An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
 "it to set a new password."
 msgstr ""
-"Um email foi enviado para <strong>%(email)s</strong> há %(ago)s minutos. "
-"Acesso o link para redefinir sua senha."
+"Um email foi enviado para <strong>%(email)s</strong> há %(ago)s. "
+"Acesse o link para redefinir sua senha."
