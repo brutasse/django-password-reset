@@ -10,6 +10,7 @@ from django.http import Http404
 from django.template import loader
 from django.utils import timezone
 from django.views import generic
+from django.contrib.auth.hashers import get_hasher
 
 try:
     from django.contrib.sites.requests import RequestSite
@@ -24,6 +25,9 @@ from .signals import user_recovers_password
 class SaltMixin(object):
     salt = 'password_recovery'
     url_salt = 'password_recovery_url'
+
+    def hash_password(self, psw):
+        return get_hasher().encode(psw, self.salt)
 
 
 def loads_with_timestamp(value, salt):
@@ -87,7 +91,14 @@ class Recover(SaltMixin, generic.FormView):
             'site': self.get_site(),
             'user': self.user,
             'username': get_username(self.user),
-            'token': signing.dumps(self.user.pk, salt=self.salt),
+            'token': signing.dumps(
+                {
+                    'pk': self.user.pk,
+                    'psw': self.hash_password(
+                        self.user.password
+                    )
+                },
+                salt=self.salt),
             'secure': self.request.is_secure(),
         }
         body = loader.render_to_string(self.email_template_name,
@@ -126,12 +137,25 @@ class Reset(SaltMixin, generic.FormView):
         self.kwargs = kwargs
 
         try:
-            pk = signing.loads(kwargs['token'], max_age=self.token_expires,
-                               salt=self.salt)
+            unsigned_pk_hash = signing.loads(kwargs['token'],
+                                             max_age=self.token_expires,
+                                             salt=self.salt)
         except signing.BadSignature:
             return self.invalid()
 
+        try:
+            pk = unsigned_pk_hash['pk']
+            password = unsigned_pk_hash['psw']
+        except KeyError:
+            return self.invalid()
+
         self.user = get_object_or_404(get_user_model(), pk=pk)
+
+        # Ensure the hashed password is same to prevent link to be reused
+        # TODO: this is assuming the password is changed
+        if password != self.hash_password(self.user.password):
+            return self.invalid()
+
         return super(Reset, self).dispatch(request, *args, **kwargs)
 
     def invalid(self):
