@@ -5,11 +5,13 @@ from django.contrib.sites.models import Site
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
 from django.template import loader
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import generic
+from django.views.decorators.debug import sensitive_post_parameters
 
 try:
     from django.contrib.sites.requests import RequestSite
@@ -17,8 +19,8 @@ except ImportError:
     from django.contrib.sites.models import RequestSite
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
-from .utils import get_user_model, get_username
 from .signals import user_recovers_password
+from .utils import get_user_model, get_username
 
 
 class SaltMixin(object):
@@ -38,7 +40,7 @@ def loads_with_timestamp(value, salt):
 
 
 class RecoverDone(SaltMixin, generic.TemplateView):
-    template_name = "password_reset/reset_sent.html"
+    template_name = 'password_reset/reset_sent.html'
 
     def get_context_data(self, **kwargs):
         ctx = super(RecoverDone, self).get_context_data(**kwargs)
@@ -120,6 +122,7 @@ class Reset(SaltMixin, generic.FormView):
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
 
+    @method_decorator(sensitive_post_parameters('password1', 'password2'))
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         self.args = args
