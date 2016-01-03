@@ -1,7 +1,6 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -14,9 +13,9 @@ from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
 
 try:
-    from django.contrib.sites.requests import RequestSite
+    from django.contrib.sites.shortcuts import get_current_site
 except ImportError:
-    from django.contrib.sites.models import RequestSite
+    from django.contrib.sites.models import get_current_site
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
@@ -79,10 +78,7 @@ class Recover(SaltMixin, generic.FormView):
         return kwargs
 
     def get_site(self):
-        if Site._meta.installed:
-            return Site.objects.get_current()
-        else:
-            return RequestSite(self.request)
+        return get_current_site(self.request)
 
     def send_notification(self):
         context = {
@@ -127,6 +123,7 @@ class Reset(SaltMixin, generic.FormView):
         self.request = request
         self.args = args
         self.kwargs = kwargs
+        self.user = None
 
         try:
             pk = signing.loads(kwargs['token'], max_age=self.token_expires,

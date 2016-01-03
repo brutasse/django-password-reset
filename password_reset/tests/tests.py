@@ -6,7 +6,10 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.six import with_metaclass
-from django.utils.unittest import SkipTest
+try:
+    from django.utils.unittest import SkipTest
+except ImportError:
+    from unittest import SkipTest
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 from ..utils import get_user_model
