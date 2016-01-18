@@ -71,6 +71,10 @@ class Recover(SaltMixin, generic.FormView):
 
     def get_form_kwargs(self):
         kwargs = super(Recover, self).get_form_kwargs()
+
+        if hasattr(settings, 'PASSWORD_RESET_CASE_SENSITIVE'):
+            self.case_sensitive = settings.PASSWORD_RESET_CASE_SENSITIVE
+
         kwargs.update({
             'case_sensitive': self.case_sensitive,
             'search_fields': self.search_fields,
