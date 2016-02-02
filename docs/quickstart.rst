@@ -30,7 +30,7 @@ What you get
 
 * The ability to look for your user's username or email address.
 
-* Password reset links that expire in two days (configurable).
+* Password reset links that expire in two days (configurable via PASSWORD_RESET_TOKEN_EXPIRES in your settings).
 
 What you can do
 ---------------
