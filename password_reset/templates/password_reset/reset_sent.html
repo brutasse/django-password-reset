@@ -4,5 +4,11 @@
 {% block title %}{% trans "Password recovery sent" %}{% endblock %}
 
 {% block content %}
+<div id="search_msg1" class="alert alert-success" role="alert">
 	<p>{% blocktrans with ago=timestamp|timesince %}An email was sent to <strong>{{ email }}</strong> {{ ago }} ago. Use the link in it to set a new password.{% endblocktrans %}</p>
+</div>
+
+<a class="url_button" href="/">{% trans "Return to Main Page" %}</a>
+
+
 {% endblock %}

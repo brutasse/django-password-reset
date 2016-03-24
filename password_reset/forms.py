@@ -4,11 +4,21 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
+
+try:
+    from captcha.fields import CaptchaField # uses django-simple-captcha==0.5.1
+except ImportError:
+    pass
+
 from .utils import get_user_model
 
 
 class PasswordRecoveryForm(forms.Form):
     username_or_email = forms.CharField()
+    try:
+        captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
+    except:
+        pass
 
     error_messages = {
         'not_found': _("Sorry, this user doesn't exist."),

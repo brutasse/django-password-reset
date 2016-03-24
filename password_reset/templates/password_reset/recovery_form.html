@@ -1,12 +1,46 @@
 {% extends "password_reset/base.html" %}
 {% load i18n %}
+{% load sekizai_tags %}
 
 {% block title %}{% trans "Password recovery" %}{% endblock %}
 
 {% block content %}
-	<form method="post" action="{{ url }}">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<p><input type="submit" value="{% trans "Recover my password" %}"></p>
-	</form>
-{% endblock %}
+<h1>{% trans "Recover Password" %}</h1>
+<form method="post" action="{{ url }}">
+{% csrf_token %}
+{% for field in form %}
+{% if field.name != "captcha" %}
+    <div class="input-group">
+        <span class="input-group-addon" id="sizing-addon2">{{ field.label_tag }}</span>
+        <input type="text" class="form-control" id="{{ field.id_for_label }}"
+        name="{{ field.html_name }}"  placeholder="{{ field.help_text }}" aria-describedby="sizing-addon2">
+    </div>
+{% else %}
+    <p>
+    <div class="input-group">
+        <span class="input-group-btn" >
+            <button class="btn btn-wmk js-captcha-refresh" type="button" id="refresh">
+                <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                {{ field.label_tag }}
+            </button>
+        </span>
+        &nbsp; {{ field }}
+    </div><!-- /input-group -->
+{% endif %}
+    <div class="field-error">
+        {{ field.errors }}
+    </div>
+{% endfor %}
+
+<div class="None" style="text-align:center;margin-top:20px;">
+    <div class="btn-group" role="group" aria-label="Reset Password">
+        <button id="reset_password" name="reset_password" value="reset_password" type="submit" class="btn btn-wmk"  onclick="
+">
+        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        {% trans "Recover my password" %}
+      </button>
+    </div>
+</div>
+
+</form>
+{% endblock content %}

@@ -31,7 +31,7 @@ def loads_with_timestamp(value, salt):
     """Returns the unsigned value along with its timestamp, the time when it
     got dumped."""
     try:
-        signing.loads(value, salt=salt, max_age=-1)
+        signing.loads(value, salt=salt, max_age=-999999)
     except signing.SignatureExpired as e:
         age = float(str(e).split('Signature age ')[1].split(' >')[0])
         timestamp = timezone.now() - datetime.timedelta(seconds=age)
@@ -52,18 +52,39 @@ class RecoverDone(SaltMixin, generic.TemplateView):
         return ctx
 recover_done = RecoverDone.as_view()
 
+class RecoverFailed(SaltMixin, generic.TemplateView):
+    template_name = 'password_reset/reset_sent_failed.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(RecoverFailed, self).get_context_data(**kwargs)
+        try:
+            ctx['timestamp'], ctx['email'] = loads_with_timestamp(
+                self.kwargs['signature'], salt=self.url_salt,
+            )
+        except signing.BadSignature:
+            raise Http404
+        return ctx
+recover_failed = RecoverFailed.as_view()
+
+
 
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
     template_name = 'password_reset/recovery_form.html'
     success_url_name = 'password_reset_sent'
+    failure_url_name = 'password_reset_sent_failed'
     email_template_name = 'password_reset/recovery_email.txt'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
+    sent_success = 0
 
     def get_success_url(self):
-        return reverse(self.success_url_name, args=[self.mail_signature])
+        if self.sent_success:
+            return reverse(self.success_url_name, args=[self.mail_signature])
+        else:
+            return reverse(self.failure_url_name, args=[self.mail_signature])
+
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -92,12 +113,13 @@ class Recover(SaltMixin, generic.FormView):
                                        context).strip()
         subject = loader.render_to_string(self.email_subject_template_name,
                                           context).strip()
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                  [self.user.email])
+        result = send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+                  [self.user.email], fail_silently=True)
+        return result
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
-        self.send_notification()
+        self.sent_success = self.send_notification()
         if (
             len(self.search_fields) == 1 and
             self.search_fields[0] == 'username'
