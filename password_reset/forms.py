@@ -6,7 +6,7 @@ from django.conf import settings
 
 
 try:
-    from captcha.fields import CaptchaField # uses django-simple-captcha==0.5.1
+    from captcha.fields import CaptchaField  # uses django-simple-captcha==0.5.1
 except ImportError:
     CaptchaField = None
     pass
@@ -14,17 +14,19 @@ except ImportError:
 from .utils import get_user_model
 
 error_messages = {
-    'not_found':        _("Sorry, this user doesn't exist."),
-    'password_mismatch':_("The two passwords didn't match."),
+    'not_found':         _("Sorry, this user doesn't exist."),
+    'password_mismatch': _("The two passwords didn't match."),
 }
+
 
 class PasswordRecoveryForm(forms.Form):
     username_or_email = forms.CharField()
     try:
-        if CaptchaField and settings.CAPTCHA_CHALLENGE_FUNCT:   # defined 
+        if CaptchaField and settings.CAPTCHA_CHALLENGE_FUNCT:   # defined
             captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
     except:
         pass
+
     def __init__(self, *args, **kwargs):
         self.case_sensitive = kwargs.pop('case_sensitive', True)
         search_fields = kwargs.pop('search_fields', ('username', 'email'))
@@ -92,7 +94,9 @@ class PasswordRecoveryForm(forms.Form):
     def get_user_by_both(self, username):
         key = '__%sexact'
         key = key % '' if self.case_sensitive else key % 'i'
-        f = lambda field: Q(**{field + key: username})
+        #f = lambda field: Q(**{field + key: username})
+        def f(field):   # to satisfy lint in Travis auto build on Github
+            return Q(**{field + key: username})
         filters = f('username') | f('email')
         User = get_user_model()
         try:

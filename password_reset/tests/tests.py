@@ -13,7 +13,6 @@ except ImportError:
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
 from ..utils import get_user_model
-#import settings
 
 """
 Commented out this part due to incompatibilities with Django 1.8.4

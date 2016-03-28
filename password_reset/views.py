@@ -52,6 +52,7 @@ class RecoverDone(SaltMixin, generic.TemplateView):
         return ctx
 recover_done = RecoverDone.as_view()
 
+
 class RecoverFailed(SaltMixin, generic.TemplateView):
     template_name = 'password_reset/reset_sent_failed.html'
 
@@ -65,7 +66,6 @@ class RecoverFailed(SaltMixin, generic.TemplateView):
             raise Http404
         return ctx
 recover_failed = RecoverFailed.as_view()
-
 
 
 class Recover(SaltMixin, generic.FormView):
@@ -84,7 +84,6 @@ class Recover(SaltMixin, generic.FormView):
             return reverse(self.success_url_name, args=[self.mail_signature])
         else:
             return reverse(self.failure_url_name, args=[self.mail_signature])
-
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -114,7 +113,7 @@ class Recover(SaltMixin, generic.FormView):
         subject = loader.render_to_string(self.email_subject_template_name,
                                           context).strip()
         result = send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                  [self.user.email], fail_silently=True)
+                                        [self.user.email], fail_silently=True)
         return result
 
     def form_valid(self, form):
