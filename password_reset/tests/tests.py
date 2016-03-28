@@ -28,6 +28,11 @@ else:
 CustomUser = None
 ExtensionUser = None
 
+
+if django.VERSION < (1, 6):
+    COLON_SUFFIX = ''       # Django 1.5 or lower do NOT auto add colon suffix
+else:
+    COLON_SUFFIX = ':'      # Django 1.6 or higher auto add colon suffix
 # Test manually via
 # ./manage.py test --settings password_reset.tests.settings password_reset.tests
 
@@ -290,9 +295,9 @@ class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
         self.user = create_user()
         url = reverse('email_recover')
         response = self.client.get(url)
-        print "----------- guiyu: response=%s" % response
         self.assertNotContains(response, "Username or Email")
-        self.assertContains(response, "Email:")
+
+        self.assertContains(response, "Email%s" % COLON_SUFFIX)
 
         response = self.client.post(url, {'username_or_email': 'foo'})
         try:
@@ -319,7 +324,7 @@ class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
         response = self.client.get(url)
 
         self.assertNotContains(response, "Username or Email")
-        self.assertContains(response, "Username:")
+        self.assertContains(response, "Username%s" % COLON_SUFFIX)
 
         response = self.client.post(url,
                                     {'username_or_email': 'bar@example.com'})
