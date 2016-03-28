@@ -15,30 +15,31 @@ from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
 from ..utils import get_user_model
 
 """
+CustomUser = None
+ExtensionUser = None
 Commented out this part due to incompatibilities with Django 1.8.4
 See http://stackoverflow.com/questions/27433228/django-1-7-django-db-utils-operationalerror-no-such-table-auth-customuser
+"""
 if django.VERSION >= (1, 5):
     from django.contrib.auth.tests.custom_user import (  # noqa
         CustomUser, ExtensionUser)
 else:
     CustomUser = None  # noqa
     ExtensionUser = None  # noqa
-"""
-CustomUser = None
-ExtensionUser = None
-
 
 if django.VERSION < (1, 6):
     COLON_SUFFIX = ''       # Django 1.5 or lower do NOT auto add colon suffix
 else:
     COLON_SUFFIX = ':'      # Django 1.6 or higher auto add colon suffix
+
 # Test manually via
-# ./manage.py test --settings password_reset.tests.settings password_reset.tests
+# ./manage.py test --settings password_reset.tests.settings
+#   password_test.tests
+
 
 class CustomUserVariants(type):
     def __new__(cls, name, bases, dct):
-        #if django.VERSION >= (1, 5) and settings.AUTH_USER_MODEL:
-        if 1>2:
+        if django.VERSION >= (1, 5):
             for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
                 suffix = custom_user.lower().replace('.', '_')
                 for key, fn in list(dct.items()):
@@ -47,7 +48,6 @@ class CustomUserVariants(type):
                         dct[name] = override_settings(
                             AUTH_USER_MODEL=custom_user)(fn)
         return super(CustomUserVariants, cls).__new__(cls, name, bases, dct)
-
 
 def create_user():
     email = 'bar@example.com'

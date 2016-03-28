@@ -6,7 +6,8 @@ from django.conf import settings
 
 
 try:
-    from captcha.fields import CaptchaField  # uses django-simple-captcha==0.5.1
+    if 'captcha' in settings.INSTALLED_APPS:
+        from captcha.fields import CaptchaField  # uses django-simple-captcha
 except ImportError:
     CaptchaField = None
     pass
@@ -94,9 +95,11 @@ class PasswordRecoveryForm(forms.Form):
     def get_user_by_both(self, username):
         key = '__%sexact'
         key = key % '' if self.case_sensitive else key % 'i'
-        #f = lambda field: Q(**{field + key: username})
+        # f = lambda field: Q(**{field + key: username})
+
         def f(field):   # to satisfy lint in Travis auto build on Github
             return Q(**{field + key: username})
+
         filters = f('username') | f('email')
         User = get_user_model()
         try:

@@ -113,15 +113,15 @@ class Recover(SaltMixin, generic.FormView):
         subject = loader.render_to_string(self.email_subject_template_name,
                                           context).strip()
         result = send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                                        [self.user.email], fail_silently=True)
+                           [ self.user.email ], fail_silently=True)
         return result
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
         self.sent_success = self.send_notification()
         if (
-            len(self.search_fields) == 1 and
-            self.search_fields[0] == 'username'
+                len(self.search_fields) == 1 and
+                self.search_fields[0] == 'username'
         ):
             # if we only search by username, don't disclose the user email
             # since it may now be public information.
