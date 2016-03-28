@@ -8,22 +8,23 @@ from django.conf import settings
 try:
     from captcha.fields import CaptchaField # uses django-simple-captcha==0.5.1
 except ImportError:
+    CaptchaField = None
     pass
 
 from .utils import get_user_model
 
+error_messages = {
+    'not_found':        _("Sorry, this user doesn't exist."),
+    'password_mismatch':_("The two passwords didn't match."),
+}
 
 class PasswordRecoveryForm(forms.Form):
     username_or_email = forms.CharField()
     try:
-        captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
+        if CaptchaField and settings.CAPTCHA_CHALLENGE_FUNCT:   # defined 
+            captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
     except:
         pass
-
-    error_messages = {
-        'not_found': _("Sorry, this user doesn't exist."),
-    }
-
     def __init__(self, *args, **kwargs):
         self.case_sensitive = kwargs.pop('case_sensitive', True)
         search_fields = kwargs.pop('search_fields', ('username', 'email'))
@@ -73,7 +74,7 @@ class PasswordRecoveryForm(forms.Form):
         try:
             user = User._default_manager.get(**{key: username})
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         return user
 
@@ -84,7 +85,7 @@ class PasswordRecoveryForm(forms.Form):
         try:
             user = User._default_manager.get(**{key: email})
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         return user
 
@@ -97,7 +98,7 @@ class PasswordRecoveryForm(forms.Form):
         try:
             user = User._default_manager.get(filters)
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         except User.MultipleObjectsReturned:
             raise forms.ValidationError(_("Unable to find user."))
@@ -115,10 +116,6 @@ class PasswordResetForm(forms.Form):
         widget=forms.PasswordInput,
     )
 
-    error_messages = {
-        'password_mismatch': _("The two passwords didn't match."),
-    }
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(PasswordResetForm, self).__init__(*args, **kwargs)
@@ -128,7 +125,7 @@ class PasswordResetForm(forms.Form):
         password2 = self.cleaned_data['password2']
         if not password1 == password2:
             raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
+                error_messages['password_mismatch'],
                 code='password_mismatch')
         return password2
 

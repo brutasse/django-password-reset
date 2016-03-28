@@ -9,12 +9,19 @@ DATABASES = {
     },
 }
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'password_reset',
     'password_reset.tests',
-)
+]
+
+try:
+    INSTALLED_APPS += [
+        #'captcha'       # include captcha if available
+    ]
+except:
+    pass
 
 MIGRATION_MODULES = {
     'auth': 'django.contrib.auth.tests.migrations',
@@ -28,3 +35,6 @@ TEMPLATES = [{
         ),
     },
 }]
+
+#AUTH_USER_MODEL = None
+DISABLE_CAPTCHA=True
