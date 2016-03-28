@@ -113,7 +113,7 @@ class Recover(SaltMixin, generic.FormView):
         subject = loader.render_to_string(self.email_subject_template_name,
                                           context).strip()
         result = send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                           [ self.user.email ], fail_silently=True)
+                           [self.user.email], fail_silently=True)
         return result
 
     def form_valid(self, form):

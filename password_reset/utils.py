@@ -9,6 +9,7 @@ except ImportError:
 
     get_user_model = my_user
 
+
 def get_username(user):
     username_field = getattr(user, 'USERNAME_FIELD', 'username')
     return getattr(user, username_field)

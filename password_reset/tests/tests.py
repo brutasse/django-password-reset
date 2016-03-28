@@ -14,12 +14,6 @@ except ImportError:
 from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
 from ..utils import get_user_model
 
-"""
-CustomUser = None
-ExtensionUser = None
-Commented out this part due to incompatibilities with Django 1.8.4
-See http://stackoverflow.com/questions/27433228/django-1-7-django-db-utils-operationalerror-no-such-table-auth-customuser
-"""
 if django.VERSION >= (1, 5):
     from django.contrib.auth.tests.custom_user import (  # noqa
         CustomUser, ExtensionUser)
@@ -48,6 +42,7 @@ class CustomUserVariants(type):
                         dct[name] = override_settings(
                             AUTH_USER_MODEL=custom_user)(fn)
         return super(CustomUserVariants, cls).__new__(cls, name, bases, dct)
+
 
 def create_user():
     email = 'bar@example.com'
