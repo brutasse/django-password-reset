@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
     url(r'^recover/(?P<signature>.+)/$', views.recover_done,
         name='password_reset_sent'),
+    url(r'^recover/(?P<signature>.+)/$', views.recover_failed,
+        name='password_reset_sent_failed'),
     url(r'^recover/$', views.recover, name='password_reset_recover'),
     url(r'^reset/done/$', views.reset_done, name='password_reset_done'),
     url(r'^reset/(?P<token>[\w:-]+)/$', views.reset,
