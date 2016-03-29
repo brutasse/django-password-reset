@@ -26,8 +26,7 @@ if django.VERSION < (1, 6):
 else:
     COLON_SUFFIX = ':'      # Django 1.6 or higher auto add colon suffix
 
-# Test manually via
-# ./manage.py test --settings password_reset.tests.settings
+# Test manually via ./manage.py test --settings password_reset.tests.settings
 #   password_test.tests
 
 
