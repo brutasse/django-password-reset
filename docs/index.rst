@@ -28,6 +28,14 @@ Contents:
 Changelog
 ---------
 
+* 0.9 (2016-06-01):
+
+  * Allow token expiration time to be customized with a setting.
+
+* 0.8.2 (2016-01-12):
+
+  * Django 1.9 compatibility (Josh Kelley).
+
 * 0.8.1 (2015-10-30):
 
   * Add pt_BR translation (GitHub user eduardo-matos).
