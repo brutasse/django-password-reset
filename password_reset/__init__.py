@@ -17,7 +17,7 @@ try:
 																			'PASSWORD_RESET_SETTINGS',
 																			DEFAULT_SETTINGS)
 except:
-		pass
+		PASSWORD_RESET_SETTINGS = {}
 
 DEFAULT_SETTINGS.update(PASSWORD_RESET_SETTINGS)
 print PASSWORD_RESET_SETTINGS
