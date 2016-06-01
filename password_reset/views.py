@@ -12,10 +12,7 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
 
-try:
-    from django.contrib.sites.shortcuts import get_current_site
-except ImportError:
-    from django.contrib.sites.models import get_current_site
+from . import PASSWORD_RESET_SETTINGS
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
@@ -78,7 +75,7 @@ class Recover(SaltMixin, generic.FormView):
         return kwargs
 
     def get_site(self):
-        return get_current_site(self.request)
+        return PASSWORD_RESET_SETTINGS['get_current_site'](self.request)
 
     def send_notification(self):
         context = {
@@ -114,7 +111,7 @@ recover = Recover.as_view()
 
 class Reset(SaltMixin, generic.FormView):
     form_class = PasswordResetForm
-    token_expires = 3600 * 48  # Two days
+    token_expires = PASSWORD_RESET_SETTINGS.get('token_expires', 3600 * 48)  # Two days
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
 
