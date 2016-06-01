@@ -81,7 +81,9 @@ class PasswordRecoveryForm(forms.Form):
     def get_user_by_both(self, username):
         key = '__%sexact'
         key = key % '' if self.case_sensitive else key % 'i'
-        f = lambda field: Q(**{field + key: username})
+
+        def f(field):
+            return Q(**{field + key: username})
         filters = f('username') | f('email')
         User = get_user_model()
         try:
