@@ -31,7 +31,7 @@ def loads_with_timestamp(value, salt):
     """Returns the unsigned value along with its timestamp, the time when it
     got dumped."""
     try:
-        signing.loads(value, salt=salt, max_age=-1)
+        signing.loads(value, salt=salt, max_age=-999999)
     except signing.SignatureExpired as e:
         age = float(str(e).split('Signature age ')[1].split(' >')[0])
         timestamp = timezone.now() - datetime.timedelta(seconds=age)
