@@ -12,10 +12,12 @@ DEFAULT_SETTINGS = {
 		'get_current_site': get_current_site
 }
 
-PASSWORD_RESET_SETTINGS = getattr(settings,
-																	'PASSWORD_RESET_SETTINGS',
-																	DEFAULT_SETTINGS)
-
+try:
+		PASSWORD_RESET_SETTINGS = getattr(settings,
+																			'PASSWORD_RESET_SETTINGS',
+																			DEFAULT_SETTINGS)
+except:
+		pass
 
 DEFAULT_SETTINGS.update(PASSWORD_RESET_SETTINGS)
 print PASSWORD_RESET_SETTINGS
