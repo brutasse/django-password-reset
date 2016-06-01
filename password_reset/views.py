@@ -114,9 +114,16 @@ recover = Recover.as_view()
 
 class Reset(SaltMixin, generic.FormView):
     form_class = PasswordResetForm
-    token_expires = 3600 * 48  # Two days
+    token_expires = None
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
+
+    def get_token_expires(self):
+        duration = getattr(settings, 'PASSWORD_RESET_TOKEN_EXPIRES',
+                           self.token_expires)
+        if duration is None:
+            duration = 3600 * 48  # Two days
+        return duration
 
     @method_decorator(sensitive_post_parameters('password1', 'password2'))
     def dispatch(self, request, *args, **kwargs):
@@ -126,7 +133,8 @@ class Reset(SaltMixin, generic.FormView):
         self.user = None
 
         try:
-            pk = signing.loads(kwargs['token'], max_age=self.token_expires,
+            pk = signing.loads(kwargs['token'],
+                               max_age=self.get_token_expires(),
                                salt=self.salt)
         except signing.BadSignature:
             return self.invalid()

@@ -41,8 +41,9 @@ What you can do
 * Use custom forms if you need something else than searching for username
   `or` email, or search case-insensitively.
 
-* Use a custom salt or expiration time for tokens.
+* Use a custom salt or expiration time for tokens (expiration via
+  ``PASSWORD_RESET_TOKEN_EXPIRES`` setting).
 
-* Allow password recovery for all users (default) or only for active users (via `RECOVER_ONLY_ACTIVE_USERS=False` setting)
+* Allow password recovery for all users (default) or only for active users (via ``RECOVER_ONLY_ACTIVE_USERS=False`` setting)
 
 See the next section.
