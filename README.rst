@@ -30,7 +30,7 @@ Installation
 For extensive documentation see the ``docs`` folder or `read it on
 readthedocs`_
 
-.. _read it on readthedocs: http://django-password-reset.readthedocs.org/
+.. _read it on readthedocs: https://django-password-reset.readthedocs.io/
 
 To install the `in-development version`_ of django-password-reset, run ``pip
 install django-password-reset==dev``.
