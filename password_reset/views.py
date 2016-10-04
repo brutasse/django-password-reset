@@ -1,6 +1,8 @@
 import datetime
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -12,14 +14,9 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
 
-try:
-    from django.contrib.sites.shortcuts import get_current_site
-except ImportError:
-    from django.contrib.sites.models import get_current_site
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
-from .utils import get_user_model, get_username
 
 
 class SaltMixin(object):
@@ -84,7 +81,7 @@ class Recover(SaltMixin, generic.FormView):
         context = {
             'site': self.get_site(),
             'user': self.user,
-            'username': get_username(self.user),
+            'username': self.user.get_username(),
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
@@ -154,7 +151,7 @@ class Reset(SaltMixin, generic.FormView):
         ctx = super(Reset, self).get_context_data(**kwargs)
         if 'invalid' not in ctx:
             ctx.update({
-                'username': get_username(self.user),
+                'username': self.user.get_username(),
                 'token': self.kwargs['token'],
             })
         return ctx
