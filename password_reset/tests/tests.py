@@ -1,7 +1,6 @@
 from unittest import SkipTest
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tests.custom_user import CustomUser, ExtensionUser
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -10,11 +9,12 @@ from django.utils import timezone
 from django.utils.six import with_metaclass
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
+from .models import CustomUser, ExtensionUser
 
 
 class CustomUserVariants(type):
     def __new__(cls, name, bases, dct):
-        for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
+        for custom_user in ['tests.CustomUser', 'tests.ExtensionUser']:
             suffix = custom_user.lower().replace('.', '_')
             for key, fn in list(dct.items()):
                 if key.startswith('test') and '_CUSTOM_' not in key:

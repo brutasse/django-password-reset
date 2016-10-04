@@ -5,11 +5,14 @@ cache: pip
 env:
   - TOXENV=py27-django18
   - TOXENV=py27-django19
+  - TOXENV=py27-django110
   - TOXENV=py33-django18
   - TOXENV=py34-django18
   - TOXENV=py34-django19
+  - TOXENV=py34-django110
   - TOXENV=py35-django18
   - TOXENV=py35-django19
+  - TOXENV=py35-django110
   - TOXENV=docs
   - TOXENV=lint
 install:
