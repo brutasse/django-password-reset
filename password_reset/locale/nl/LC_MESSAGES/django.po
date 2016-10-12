@@ -1,0 +1,125 @@
+# django-password-reset translations for nl-be.
+# This file is distributed under the same license as the django-password-reset package.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-06 14:54+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Bastiaan Raa <bastiaanraa@gmail.com>\n"
+"Language-Team: \n"
+"Language: NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:26
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: forms.py:27
+msgid "Email"
+msgstr "E-mail"
+
+#: forms.py:28
+msgid "Username or Email"
+msgstr "Gebruikersnaam of e-mail"
+
+#: forms.py:48 forms.py:58 forms.py:70
+msgid "Sorry, this user doesn't exist."
+msgstr "Sorry, deze gebruiker bestaat niet."
+
+#: forms.py:72
+msgid "Unable to find user."
+msgstr "Gebuiker kon niet gevonden worden."
+
+#: forms.py:78
+msgid "New password"
+msgstr "Nieuw wachtwoord"
+
+#: forms.py:82
+msgid "New password (confirm)"
+msgstr "Nieuw wachtwoord (bevestigen)"
+
+#: forms.py:94
+msgid "The two passwords didn't match."
+msgstr "De twee wachtwoorden komen niet overeen."
+
+#: templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Nieuw wachtwoord bewaard"
+
+#: templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "Je wachtwoord werd aangepast. "
+"Je kan het onmiddellijk gebruiken."
+
+#: templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Beste %(username)s"
+
+#: templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr "Jij -- of iemand die zich als jou voordoet -- heeft een nieuw "
+"wachtwoord aangevraagd op %(domain)s"
+
+#: templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Je kan je wachtwoord wijzigen via de volgende link:"
+
+#: templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "Indien je je wachtwoord niet wil wijzigen, negeer dan deze email."
+
+#: templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Wachtwoord herstel op %(domain)s"
+
+#: templates/password_reset/recovery_form.html:5
+msgid "Password recovery"
+msgstr "Wachtwoord herstellen"
+
+#: templates/password_reset/recovery_form.html:11
+msgid "Recover my password"
+msgstr "Herstel mijn wachtwoord"
+
+#: templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr "Sorry, deze link is niet geldig. Je kan steeds <a href="
+"\"%(recovery_url)s\">een nieuw aanvragen</a>."
+
+#: templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "Hallo, <strong>%(username)s</strong>. Gelieve je nieuwe wachtwoord in te geven."
+
+#: templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Nieuw wachtwoord instellen"
+
+#: templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Herstel van wachtwoord is verzonden"
+
+#: templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr "Een e-mail werd verzonden naar <strong>%(email)s</strong> %(ago)s geleden."
+"Gebruik de link in de e-mail om een nieuw wachtwoord in te stellen."
