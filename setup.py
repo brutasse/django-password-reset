@@ -14,6 +14,7 @@ setup(
     author_email='bruno@renie.fr',
     packages=find_packages(),
     include_package_data=True,
+    package_data = {'password_reset': ['templates/password_reset/*.html',]},
     url='https://github.com/brutasse/django-password-reset',
     license='BSD licence, see LICENSE file',
     description='Class-based views for password reset.',
