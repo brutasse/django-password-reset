@@ -16,9 +16,7 @@ INSTALLED_APPS = (
     'password_reset.tests',
 )
 
-MIGRATION_MODULES = {
-    'auth': 'django.contrib.auth.tests.migrations',
-}
+MIDDLEWARE = []
 
 TEMPLATES = [{
     'BACKEND': 'django.template.backends.django.DjangoTemplates',
