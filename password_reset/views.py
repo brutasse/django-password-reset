@@ -47,6 +47,8 @@ class RecoverDone(SaltMixin, generic.TemplateView):
         except signing.BadSignature:
             raise Http404
         return ctx
+
+
 recover_done = RecoverDone.as_view()
 
 
@@ -106,6 +108,8 @@ class Recover(SaltMixin, generic.FormView):
             email = self.user.email
         self.mail_signature = signing.dumps(email, salt=self.url_salt)
         return super(Recover, self).form_valid(form)
+
+
 recover = Recover.as_view()
 
 
@@ -164,6 +168,8 @@ class Reset(SaltMixin, generic.FormView):
             request=self.request
         )
         return redirect(self.get_success_url())
+
+
 reset = Reset.as_view()
 
 
