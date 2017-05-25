@@ -30,7 +30,7 @@ Changelog
 
 * 1.0 (TBA):
 
-  * Drop support for Django < 1.8 and confirm support for Django 1.10.
+  * Drop support for Django < 1.8 and confirm support for Django 1.10 and 1.11.
 
 * 0.9 (2016-06-01):
 
