@@ -28,7 +28,7 @@ Contents:
 Changelog
 ---------
 
-* 1.0 (TBA):
+* 1.0 (2017-05-30):
 
   * Drop support for Django < 1.8 and confirm support for Django 1.10 and 1.11.
 
