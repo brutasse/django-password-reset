@@ -28,6 +28,10 @@ Contents:
 Changelog
 ---------
 
+* 1.0 (TBA):
+
+  * Drop support for Django < 1.8 and confirm support for Django 1.10 and 1.11.
+
 * 0.9 (2016-06-01):
 
   * Allow token expiration time to be customized with a setting.

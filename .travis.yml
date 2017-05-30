@@ -3,24 +3,19 @@ python: "3.5"
 sudo: false
 cache: pip
 env:
-  - TOXENV=py26-django15
-  - TOXENV=py26-django16
-  - TOXENV=py27-django15
-  - TOXENV=py27-django16
-  - TOXENV=py27-django17
   - TOXENV=py27-django18
   - TOXENV=py27-django19
-  - TOXENV=py33-django15
-  - TOXENV=py33-django16
-  - TOXENV=py33-django17
+  - TOXENV=py27-django110
+  - TOXENV=py27-django111
   - TOXENV=py33-django18
-  - TOXENV=py34-django15
-  - TOXENV=py34-django16
-  - TOXENV=py34-django17
   - TOXENV=py34-django18
   - TOXENV=py34-django19
+  - TOXENV=py34-django110
+  - TOXENV=py34-django111
   - TOXENV=py35-django18
   - TOXENV=py35-django19
+  - TOXENV=py35-django110
+  - TOXENV=py35-django111
   - TOXENV=docs
   - TOXENV=lint
 install:

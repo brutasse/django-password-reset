@@ -1,10 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-
-from .utils import get_user_model
 
 
 class PasswordRecoveryForm(forms.Form):

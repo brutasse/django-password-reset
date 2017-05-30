@@ -16,7 +16,7 @@ functionality.
 
 * Author: Bruno Renié and `contributors`_
 * Licence: BSD
-* Compatibility: Django 1.4+ (cryptographic signing needed)
+* Compatibility: Django 1.8+
 
 .. _contributors: https://github.com/brutasse/django-password-reset/contributors
 

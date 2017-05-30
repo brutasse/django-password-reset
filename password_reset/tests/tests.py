@@ -1,37 +1,26 @@
-import django
+from unittest import SkipTest
 
+from django.contrib.auth import get_user_model
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.six import with_metaclass
-try:
-    from django.utils.unittest import SkipTest
-except ImportError:
-    from unittest import SkipTest
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
-from ..utils import get_user_model
-
-if django.VERSION >= (1, 5):
-    from django.contrib.auth.tests.custom_user import (  # noqa
-        CustomUser, ExtensionUser)
-else:
-    CustomUser = None  # noqa
-    ExtensionUser = None  # noqa
+from .models import CustomUser, ExtensionUser
 
 
 class CustomUserVariants(type):
     def __new__(cls, name, bases, dct):
-        if django.VERSION >= (1, 5):
-            for custom_user in ['auth.CustomUser', 'auth.ExtensionUser']:
-                suffix = custom_user.lower().replace('.', '_')
-                for key, fn in list(dct.items()):
-                    if key.startswith('test') and '_CUSTOM_' not in key:
-                        name = '{0}_CUSTOM_{1}'.format(key, suffix)
-                        dct[name] = override_settings(
-                            AUTH_USER_MODEL=custom_user)(fn)
+        for custom_user in ['tests.CustomUser', 'tests.ExtensionUser']:
+            suffix = custom_user.lower().replace('.', '_')
+            for key, fn in list(dct.items()):
+                if key.startswith('test') and '_CUSTOM_' not in key:
+                    name = '{0}_CUSTOM_{1}'.format(key, suffix)
+                    dct[name] = override_settings(
+                        AUTH_USER_MODEL=custom_user)(fn)
         return super(CustomUserVariants, cls).__new__(cls, name, bases, dct)
 
 

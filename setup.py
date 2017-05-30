@@ -19,12 +19,16 @@ setup(
     description='Class-based views for password reset.',
     long_description=open('README.rst').read(),
     install_requires=[
-        'Django>=1.4',
+        'Django>=1.8',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
+        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 1.9',
+        'Framework :: Django :: 1.10',
+        'Framework :: Django :: 1.11',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
