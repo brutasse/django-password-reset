@@ -1,8 +1,6 @@
 import datetime
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
 from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -13,10 +11,9 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
-from .compat import get_current_site
+from .compat import get_current_site, get_user_model, get_username
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
-from .utils import get_user_model, get_username
 
 
 class SaltMixin(object):

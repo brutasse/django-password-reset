@@ -11,8 +11,8 @@ except ImportError:
     from unittest import SkipTest
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
-from ..utils import get_user_model
 from .models import CustomUser, ExtensionUser
+from ..compat import get_user_model
 
 if django.VERSION < (1, 6):
     COLON_SUFFIX = ''       # Django 1.5 or lower do NOT auto add colon suffix

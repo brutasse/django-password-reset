@@ -3,7 +3,7 @@ from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-
+from .compat import get_user_model
 
 try:
     if 'captcha' in settings.INSTALLED_APPS:
@@ -11,8 +11,6 @@ try:
 except ImportError:
     CaptchaField = None
 
-
-from .utils import get_user_model
 
 error_messages = {
     'not_found':         _("Sorry, this user doesn't exist."),
