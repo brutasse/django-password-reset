@@ -7,9 +7,28 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.six import with_metaclass
+try:
+    from django.utils.unittest import SkipTest
+except ImportError:
+    from unittest import SkipTest
 
-from ..forms import PasswordRecoveryForm, PasswordResetForm
-from .models import CustomUser, ExtensionUser
+from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
+from ..utils import get_user_model
+
+if django.VERSION >= (1, 5):
+    from django.contrib.auth.tests.custom_user import (  # noqa
+        CustomUser, ExtensionUser)
+else:
+    CustomUser = None  # noqa
+    ExtensionUser = None  # noqa
+
+if django.VERSION < (1, 6):
+    COLON_SUFFIX = ''       # Django 1.5 or lower do NOT auto add colon suffix
+else:
+    COLON_SUFFIX = ':'      # Django 1.6 or higher auto add colon suffix
+
+# Test manually via ./manage.py test --settings password_reset.tests.settings
+#   password_test.tests
 
 
 class CustomUserVariants(type):
@@ -50,7 +69,7 @@ class FormTests(with_metaclass(CustomUserVariants, TestCase)):
         form = PasswordRecoveryForm(data={'username_or_email': 'inexisting'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['username_or_email'],
-                         ["Sorry, this user doesn't exist."])
+                         [error_messages['not_found']])
 
         create_user()
 
@@ -122,7 +141,7 @@ class FormTests(with_metaclass(CustomUserVariants, TestCase)):
         }, search_fields=['email'])
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['username_or_email'],
-                         ["Sorry, this user doesn't exist."])
+                         [error_messages['not_found']])
 
         user = create_user()
 
@@ -131,7 +150,7 @@ class FormTests(with_metaclass(CustomUserVariants, TestCase)):
         }, search_fields=['email'])
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['username_or_email'],
-                         ["Sorry, this user doesn't exist."])
+                         [error_messages['not_found']])
 
         # Search by actual email works
         form = PasswordRecoveryForm(data={
@@ -151,7 +170,7 @@ class FormTests(with_metaclass(CustomUserVariants, TestCase)):
         }, search_fields=['username'])
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['username_or_email'],
-                         ["Sorry, this user doesn't exist."])
+                         [error_messages['not_found']])
 
         form = PasswordRecoveryForm(data={
             'username_or_email': 'username',
@@ -270,7 +289,8 @@ class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
         url = reverse('email_recover')
         response = self.client.get(url)
         self.assertNotContains(response, "Username or Email")
-        self.assertContains(response, "Email:")
+
+        self.assertContains(response, "Email%s" % COLON_SUFFIX)
 
         response = self.client.post(url, {'username_or_email': 'foo'})
         try:
@@ -299,7 +319,7 @@ class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
         response = self.client.get(url)
 
         self.assertNotContains(response, "Username or Email")
-        self.assertContains(response, "Username:")
+        self.assertContains(response, "Username%s" % COLON_SUFFIX)
 
         response = self.client.post(url,
                                     {'username_or_email': 'bar@example.com'})

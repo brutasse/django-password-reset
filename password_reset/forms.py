@@ -1,17 +1,32 @@
 from django import forms
-from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
+try:
+    if 'captcha' in settings.INSTALLED_APPS:
+        from captcha.fields import CaptchaField  # uses django-simple-captcha
+except ImportError:
+    CaptchaField = None
+
+
+from .utils import get_user_model
+
+error_messages = {
+    'not_found':         _("Sorry, this user doesn't exist."),
+    'password_mismatch': _("The two passwords didn't match."),
+}
+
+
 class PasswordRecoveryForm(forms.Form):
     username_or_email = forms.CharField()
-
-    error_messages = {
-        'not_found': _("Sorry, this user doesn't exist."),
-    }
+    try:
+        if CaptchaField and settings.CAPTCHA_CHALLENGE_FUNCT:   # defined
+            captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
+    except:
+        pass
 
     def __init__(self, *args, **kwargs):
         self.case_sensitive = kwargs.pop('case_sensitive', True)
@@ -68,7 +83,7 @@ class PasswordRecoveryForm(forms.Form):
         try:
             user = self.get_user(**{key: username})
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         return user
 
@@ -79,7 +94,7 @@ class PasswordRecoveryForm(forms.Form):
         try:
             user = self.get_user(**{key: email})
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         return user
 
@@ -87,14 +102,15 @@ class PasswordRecoveryForm(forms.Form):
         key = '__%sexact'
         key = key % '' if self.case_sensitive else key % 'i'
 
-        def f(field):
+        def f(field):   # to satisfy lint in Travis auto build on Github
             return Q(**{field + key: username})
+
         filters = f('username') | f('email')
         User = get_user_model()
         try:
             user = self.get_user(filters)
         except User.DoesNotExist:
-            raise forms.ValidationError(self.error_messages['not_found'],
+            raise forms.ValidationError(error_messages['not_found'],
                                         code='not_found')
         except User.MultipleObjectsReturned:
             raise forms.ValidationError(_("Unable to find user."))
@@ -112,10 +128,6 @@ class PasswordResetForm(forms.Form):
         widget=forms.PasswordInput,
     )
 
-    error_messages = {
-        'password_mismatch': _("The two passwords didn't match."),
-    }
-
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         super(PasswordResetForm, self).__init__(*args, **kwargs)
@@ -125,7 +137,7 @@ class PasswordResetForm(forms.Form):
         password2 = self.cleaned_data['password2']
         if not password1 == password2:
             raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
+                error_messages['password_mismatch'],
                 code='password_mismatch')
         return password2
 

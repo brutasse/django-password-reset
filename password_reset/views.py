@@ -14,9 +14,14 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
 
+try:
+    from django.contrib.sites.shortcuts import get_current_site
+except ImportError:
+    from django.contrib.sites.models import get_current_site
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
+from .utils import get_user_model, get_username
 
 
 class SaltMixin(object):
@@ -52,18 +57,38 @@ class RecoverDone(SaltMixin, generic.TemplateView):
 recover_done = RecoverDone.as_view()
 
 
+class RecoverFailed(SaltMixin, generic.TemplateView):
+    template_name = 'password_reset/reset_sent_failed.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(RecoverFailed, self).get_context_data(**kwargs)
+        try:
+            ctx['timestamp'], ctx['email'] = loads_with_timestamp(
+                self.kwargs['signature'], salt=self.url_salt,
+            )
+        except signing.BadSignature:
+            raise Http404
+        return ctx
+recover_failed = RecoverFailed.as_view()
+
+
 class Recover(SaltMixin, generic.FormView):
     case_sensitive = True
     form_class = PasswordRecoveryForm
     template_name = 'password_reset/recovery_form.html'
     success_url_name = 'password_reset_sent'
+    failure_url_name = 'password_reset_sent_failed'
     email_template_name = 'password_reset/recovery_email.txt'
     email_html_template_name = 'password_reset/recovery_email.html'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
+    sent_success = 0
 
     def get_success_url(self):
-        return reverse(self.success_url_name, args=[self.mail_signature])
+        if self.sent_success:
+            return reverse(self.success_url_name, args=[self.mail_signature])
+        else:
+            return reverse(self.failure_url_name, args=[self.mail_signature])
 
     def get_context_data(self, **kwargs):
         kwargs['url'] = self.request.get_full_path()
@@ -88,7 +113,7 @@ class Recover(SaltMixin, generic.FormView):
         context = {
             'site': self.get_site(),
             'user': self.user,
-            'username': self.user.get_username(),
+            'username': get_username(self.user),
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
@@ -108,10 +133,10 @@ class Recover(SaltMixin, generic.FormView):
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
-        self.send_notification()
+        self.sent_success = self.send_notification()
         if (
-            len(self.search_fields) == 1 and
-            self.search_fields[0] == 'username'
+                len(self.search_fields) == 1 and
+                self.search_fields[0] == 'username'
         ):
             # if we only search by username, don't disclose the user email
             # since it may now be public information.
@@ -127,7 +152,7 @@ recover = Recover.as_view()
 
 class Reset(SaltMixin, generic.FormView):
     form_class = PasswordResetForm
-    token_expires = None
+    token_expires = 3600 * 48  # Two days
     template_name = 'password_reset/reset.html'
     success_url = reverse_lazy('password_reset_done')
 
@@ -146,8 +171,7 @@ class Reset(SaltMixin, generic.FormView):
         self.user = None
 
         try:
-            pk = signing.loads(kwargs['token'],
-                               max_age=self.get_token_expires(),
+            pk = signing.loads(kwargs['token'], max_age=self.token_expires,
                                salt=self.salt)
         except signing.BadSignature:
             return self.invalid()
