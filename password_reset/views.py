@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -58,6 +58,7 @@ class Recover(SaltMixin, generic.FormView):
     template_name = 'password_reset/recovery_form.html'
     success_url_name = 'password_reset_sent'
     email_template_name = 'password_reset/recovery_email.txt'
+    email_html_template_name = 'password_reset/recovery_email.html'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
 
@@ -87,12 +88,19 @@ class Recover(SaltMixin, generic.FormView):
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
-        body = loader.render_to_string(self.email_template_name,
-                                       context).strip()
-        subject = loader.render_to_string(self.email_subject_template_name,
-                                          context).strip()
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                  [self.user.email])
+        text_content = loader.render_to_string(
+            self.email_template_name, context).strip()
+        html_content = loader.render_to_string(
+            self.email_html_template_name, context).strip()
+        subject = loader.render_to_string(
+            self.email_subject_template_name, context).strip()
+
+        msg = EmailMultiAlternatives(
+            subject, text_content,
+            settings.DEFAULT_FROM_EMAIL, [self.user.email, ])
+        msg.attach_alternative(html_content, 'text/html')
+
+        msg.send()
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']
