@@ -13,12 +13,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
-
-try:
-    from django.contrib.sites.shortcuts import get_current_site
-except ImportError:
-    from django.contrib.sites.models import get_current_site
-
+from .compat import get_current_site
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
 from .utils import get_user_model, get_username
