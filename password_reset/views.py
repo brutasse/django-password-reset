@@ -128,8 +128,8 @@ class Recover(SaltMixin, generic.FormView):
             subject, text_content,
             settings.DEFAULT_FROM_EMAIL, [self.user.email, ])
         msg.attach_alternative(html_content, 'text/html')
-
-        msg.send()
+        result = msg.send(fail_silently=True)
+        return result
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']

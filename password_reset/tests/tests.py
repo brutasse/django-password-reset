@@ -1,6 +1,4 @@
-from unittest import SkipTest
-
-from django.contrib.auth import get_user_model
+import django
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -14,13 +12,7 @@ except ImportError:
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm, error_messages
 from ..utils import get_user_model
-
-if django.VERSION >= (1, 5):
-    from django.contrib.auth.tests.custom_user import (  # noqa
-        CustomUser, ExtensionUser)
-else:
-    CustomUser = None  # noqa
-    ExtensionUser = None  # noqa
+from .models import CustomUser, ExtensionUser
 
 if django.VERSION < (1, 6):
     COLON_SUFFIX = ''       # Django 1.5 or lower do NOT auto add colon suffix
