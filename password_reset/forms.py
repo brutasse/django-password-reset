@@ -1,30 +1,45 @@
 from django import forms
+from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from .compat import get_user_model
 
-try:
-    if 'captcha' in settings.INSTALLED_APPS:
-        from captcha.fields import CaptchaField  # uses django-simple-captcha
-except ImportError:
-    CaptchaField = None
-
-
 error_messages = {
-    'not_found':         _("Sorry, this user doesn't exist."),
+    'not_found': _("Sorry, this user doesn't exist."),
     'password_mismatch': _("The two passwords didn't match."),
 }
 
+try:
+    # must be installed before.
+    if 'captcha' not in settings.INSTALLED_APPS:
+        raise ImproperlyConfigured("captcha is not installed.")
 
-class PasswordRecoveryForm(forms.Form):
+    # uses django-simple-captcha
+    from captcha.fields import CaptchaField
+
+
+    class CaptchaForm(forms.Form):
+        captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
+
+        def order_fields(self, field_order):
+            """https://docs.djangoproject.com/en/1.9/ref/forms/api/#django.forms.Form.order_fields"""
+            # Put the captcha at the bottom of the form
+            field_name = "captcha"
+            if field_order is None:
+                field_order = self.fields.keys()
+            field_order.pop(field_order.index(field_name))
+            field_order.append(field_name)
+            return super(CaptchaForm, self).order_fields(field_order)
+
+
+except (ImproperlyConfigured, ImportError):
+    CaptchaForm = forms.Form
+
+
+class PasswordRecoveryForm(CaptchaForm):
     username_or_email = forms.CharField()
-    try:
-        if CaptchaField and settings.CAPTCHA_CHALLENGE_FUNCT:   # defined
-            captcha = CaptchaField(label=_('Captcha'))  # Optional Captcha
-    except:
-        pass
 
     def __init__(self, *args, **kwargs):
         self.case_sensitive = kwargs.pop('case_sensitive', True)
@@ -65,7 +80,7 @@ class PasswordRecoveryForm(forms.Form):
 
         if recovery_only_active_users and not user_is_active:
             raise forms.ValidationError(_("Sorry, inactive users can't "
-                                        "recover their password."))
+                                          "recover their password."))
 
         return username
 
@@ -100,7 +115,7 @@ class PasswordRecoveryForm(forms.Form):
         key = '__%sexact'
         key = key % '' if self.case_sensitive else key % 'i'
 
-        def f(field):   # to satisfy lint in Travis auto build on Github
+        def f(field):  # to satisfy lint in Travis auto build on Github
             return Q(**{field + key: username})
 
         filters = f('username') | f('email')

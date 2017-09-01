@@ -20,7 +20,8 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         'Django>=1.4',
-        #'django-simple-captcha>=0.5.1',     # will use captcha if installed
+        # It will be installed, but will only be used if properly configured.
+        'django-simple-captcha>=0.5.1',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
