@@ -1,0 +1,9 @@
+{% extends "password_reset/base_email.html" %}
+{% load i18n %}
+
+{% block content %}
+	<p>{% blocktrans %}Dear {{ username }},{% endblocktrans %}</p>
+	<p>{% blocktrans with domain=site.domain %}You -- or someone pretending to be you -- has requested a password reset on {{ domain }}.{% endblocktrans %}</p>
+	<p>{% trans "You can set your new password by following this link:" %}&nbsp;<a href="http{% if secure %}s{% endif %}://{{ site.domain }}{% url "password_reset_reset" token %}">http{% if secure %}s{% endif %}://{{ site.domain }}{% url "password_reset_reset" token %}</a></p>
+	<p>{% trans "If you don't want to reset your password, simply ignore this email and it will stay unchanged." %}</p>
+{% endblock content %}

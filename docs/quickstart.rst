@@ -32,6 +32,8 @@ What you get
 
 * Password reset links that expire in two days (configurable).
 
+* Optionally invoke a captcha in the password reset page if django-simple-captcha (0.5.1 or higher) is installed and configured.
+
 What you can do
 ---------------
 

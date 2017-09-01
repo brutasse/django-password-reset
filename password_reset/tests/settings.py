@@ -9,12 +9,12 @@ DATABASES = {
     },
 }
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'password_reset',
     'password_reset.tests',
-)
+]
 
 MIDDLEWARE = []
 
