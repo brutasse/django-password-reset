@@ -130,22 +130,3 @@ msgstr ""
 "אימייל נשלח </br>ל <strong>%(email)s</strong> לפני %(ago)s . "
 "השתמשו בקישור שנשלח לאיפוס הסיסמה"
 
-#we suggest to replace this origin messages:
-
-
-#: templates/password_reset/recovery_email.txt:1
-#, python-format
-msgid "Hi,"
-msgstr "שלום,"
-
-
-
-#: templates/password_reset/recovery_email.txt:3
-#, python-format
-msgid ""
-"You has requested a password reset on "
-"%(domain)s."
-msgstr ""
-"ביקשת איפוס סיסמה בדומיין "
-"%(domain)s."
-
