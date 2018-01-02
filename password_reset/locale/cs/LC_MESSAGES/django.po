@@ -1,0 +1,134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-02 14:20+0100\n"
+"PO-Revision-Date: 2018-01-02 14:40+0100\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: password_reset/forms.py:13
+msgid "Sorry, this user doesn't exist."
+msgstr "Omlouváme se, ale tento uživatel neexistuje."
+
+#: password_reset/forms.py:30
+msgid "Username"
+msgstr "Uživatelské jméno (email)"
+
+#: password_reset/forms.py:31
+msgid "Email"
+msgstr "Email"
+
+#: password_reset/forms.py:32
+msgid "Username or Email"
+msgstr "Uživatelské jméno, nebo email"
+
+#: password_reset/forms.py:54
+msgid "Sorry, inactive users can't recover their password."
+msgstr ""
+"Omlouváme se, ale neaktivní uživatel si nemůže změnit heslo. Kontaktujte nás "
+"prosím."
+
+#: password_reset/forms.py:94
+msgid "Unable to find user."
+msgstr "Uživatel nebyl nalezen."
+
+#: password_reset/forms.py:101
+msgid "New password"
+msgstr "Nové heslo"
+
+#: password_reset/forms.py:105
+msgid "New password (confirm)"
+msgstr "Nové heslo (potvrzení)"
+
+#: password_reset/forms.py:110
+msgid "The two passwords didn't match."
+msgstr "Zadaná hesla nesouhlasí."
+
+#: password_reset/templates/password_reset/recovery_done.html:3
+msgid "New password set"
+msgstr "Heslo nastaveno."
+
+#: password_reset/templates/password_reset/recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "Heslo změněno. Můžete ho použít pro přihlášení."
+
+#: password_reset/templates/password_reset/recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "Uživateli %(username)s,"
+
+#: password_reset/templates/password_reset/recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr ""
+"Vy, nebo někdo, kdo se za vás vydává, požádal o změnu hesla pro %(domain)s."
+
+#: password_reset/templates/password_reset/recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "Nové heslo můžete nastavit na tomto odkazu:"
+
+#: password_reset/templates/password_reset/recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "Nechcete-li své heslo měnit, prosím ignorujte tento email."
+
+#: password_reset/templates/password_reset/recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "Změna hesla pro %(domain)s"
+
+#: password_reset/templates/password_reset/recovery_form.html:4
+msgid "Password recovery"
+msgstr "Změna hesla"
+
+#: password_reset/templates/password_reset/recovery_form.html:10
+msgid "Recover my password"
+msgstr "Změň moje heslo"
+
+#: password_reset/templates/password_reset/reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr ""
+"Omlouváme se, ale tento odkaz již není platný. Můžete zažádat o <a href="
+"\"%(recovery_url)s\">nový</a>."
+
+#: password_reset/templates/password_reset/reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "<strong>%(username)s</strong>, zadejte nové heslo."
+
+#: password_reset/templates/password_reset/reset.html:11
+msgid "Set new password"
+msgstr "Zadejte nové heslo"
+
+#: password_reset/templates/password_reset/reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "Žádost o změnu odeslána."
+
+#: password_reset/templates/password_reset/reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr ""
+"Email zaslán na <strong>%(email)s</strong> (před %(ago)s0. Použijte odkaz v "
+"mailu pro nastavení nového hesla."
