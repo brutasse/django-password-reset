@@ -15,7 +15,7 @@ from django.views.decorators.debug import sensitive_post_parameters
 
 try:
     from django.urls import reverse, reverse_lazy
-except:
+except ImportError:
     from django.core.urlresolvers import reverse, reverse_lazy
 
 from .forms import PasswordRecoveryForm, PasswordResetForm

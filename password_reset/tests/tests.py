@@ -9,7 +9,7 @@ from django.utils.six import with_metaclass
 
 try:
     from django.urls import reverse
-except:
+except ImportError:
     from django.core.urlresolvers import reverse
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
