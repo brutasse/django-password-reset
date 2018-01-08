@@ -2,11 +2,15 @@ from unittest import SkipTest
 
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
 from django.utils.six import with_metaclass
+
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 from .models import CustomUser, ExtensionUser
