@@ -1,3 +1,5 @@
+.. -_\- coding: utf-8 -_-
+
 Django-password-reset
 =====================
 
