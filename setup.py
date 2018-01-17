@@ -9,7 +9,7 @@ from setuptools import find_packages
 
 try:
     long_description = open('README.rst', encoding='utf-8').read()
-except UnicodeDecodeError:
+except TypeError:
     long_description = open('README.rst').read()
 
 setup(
