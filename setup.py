@@ -17,7 +17,7 @@ setup(
     url='https://github.com/brutasse/django-password-reset',
     license='BSD licence, see LICENSE file',
     description='Class-based views for password reset.',
-    long_description=open('README.rst').read(),
+    long_description=open('README.rst', encoding='utf-8').read(),
     install_requires=[
         'Django>=1.8',
     ],
