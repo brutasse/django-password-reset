@@ -7,6 +7,11 @@ except ImportError:
 from setuptools import find_packages
 
 
+try:
+    long_description = open('README.rst', encoding='utf-8').read()
+except UnicodeDecodeError:
+    long_description = open('README.rst').read()
+
 setup(
     name='django-password-reset',
     version=__import__('password_reset').__version__,
@@ -17,7 +22,7 @@ setup(
     url='https://github.com/brutasse/django-password-reset',
     license='BSD licence, see LICENSE file',
     description='Class-based views for password reset.',
-    long_description=open('README.rst', encoding='utf-8').read(),
+    long_description=long_description,
     install_requires=[
         'Django>=1.8',
     ],
