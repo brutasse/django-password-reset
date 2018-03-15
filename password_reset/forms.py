@@ -4,9 +4,10 @@ from django.core.validators import validate_email
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from .utils import PlaceholderForm
 
 
-class PasswordRecoveryForm(forms.Form):
+class PasswordRecoveryForm(PlaceholderForm, forms.Form):
     username_or_email = forms.CharField()
 
     error_messages = {
@@ -96,7 +97,7 @@ class PasswordRecoveryForm(forms.Form):
         return user
 
 
-class PasswordResetForm(forms.Form):
+class PasswordResetForm(PlaceholderForm, forms.Form):
     password1 = forms.CharField(
         label=_('New password'),
         widget=forms.PasswordInput,
