@@ -40,6 +40,7 @@ class PasswordRecoveryForm(PlaceholderForm, forms.Form):
         else:
             self.label_key = 'both'
         self.fields['username_or_email'].label = labels[self.label_key]
+        self.set_placeHolder()
 
     def clean_username_or_email(self):
         username = self.cleaned_data['username_or_email']

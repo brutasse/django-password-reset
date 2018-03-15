@@ -2,8 +2,7 @@ from django import forms
 
 
 class PlaceholderForm(object):
-    def __init__(self, *args, **kwargs):
-        super(PlaceholderForm, self).__init__(*args, **kwargs)
+    def set_placeholder(self):
         for field_name in self.fields:
             field = self.fields.get(field_name)
             if field:
