@@ -114,8 +114,8 @@ class PasswordResetForm(PlaceholderForm, forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
-        self.set_placeholder()
         super(PasswordResetForm, self).__init__(*args, **kwargs)
+        self.set_placeholder()
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1', '')
