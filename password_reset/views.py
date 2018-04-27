@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import signing
-from django.core.mail import send_mail
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
@@ -13,7 +12,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
-
+from templated_email import send_templated_mail
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
@@ -57,7 +56,7 @@ class Recover(SaltMixin, generic.FormView):
     form_class = PasswordRecoveryForm
     template_name = 'password_reset/recovery_form.html'
     success_url_name = 'password_reset_sent'
-    email_template_name = 'password_reset/recovery_email.txt'
+    email_template_name = 'templated_email/recovery_email.email'
     email_subject_template_name = 'password_reset/recovery_email_subject.txt'
     search_fields = ['username', 'email']
 
@@ -87,12 +86,11 @@ class Recover(SaltMixin, generic.FormView):
             'token': signing.dumps(self.user.pk, salt=self.salt),
             'secure': self.request.is_secure(),
         }
-        body = loader.render_to_string(self.email_template_name,
-                                       context).strip()
-        subject = loader.render_to_string(self.email_subject_template_name,
-                                          context).strip()
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
-                  [self.user.email], html_message=body)
+
+        send_templated_mail(template_name=self.email_template_name,
+                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            recipient_list=[self.user.email],
+                            context=context)
 
     def form_valid(self, form):
         self.user = form.cleaned_data['user']

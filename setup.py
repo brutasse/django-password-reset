@@ -20,6 +20,7 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         'Django>=1.8',
+        'django-templated-email==2.2.0'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
