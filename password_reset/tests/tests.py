@@ -2,9 +2,9 @@ from unittest import SkipTest
 
 from django.contrib.auth import get_user_model
 from django.core import mail
-from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.six import with_metaclass
 

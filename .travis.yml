@@ -6,6 +6,9 @@ env:
   - TOXENV=py27-django111
   - TOXENV=py34-django111
   - TOXENV=py35-django111
+  - TOXENV=py34-django20
+  - TOXENV=py35-django20
+  - TOXENV=py35-django21
   - TOXENV=docs
   - TOXENV=lint
 install:
