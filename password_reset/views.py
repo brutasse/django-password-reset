@@ -14,6 +14,12 @@ from django.utils.decorators import method_decorator
 from django.views import generic
 from django.views.decorators.debug import sensitive_post_parameters
 
+from django import VERSION
+
+if VERSION >= (2, 0):
+    from django.urls import reverse, reverse_lazy
+else:
+    from django.core.urlresolvers import reverse, reverse_lazy
 
 from .forms import PasswordRecoveryForm, PasswordResetForm
 from .signals import user_recovers_password
