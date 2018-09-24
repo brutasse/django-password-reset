@@ -28,6 +28,10 @@ Contents:
 Changelog
 ---------
 
+* 2.0 (2018-08-27):
+
+  * Drop support for Django < 1.11 and add support for Django 2.0 and 2.1.
+
 * 1.0 (2017-05-30):
 
   * Drop support for Django < 1.8 and confirm support for Django 1.10 and 1.11.
