@@ -3,11 +3,11 @@ Welcome to django-password-reset's documentation!
 
 Class-based views for password reset, the usual "forget password?" workflow:
 
-* User fills his email address or username
-* Django sends him an email with a token to reset his password
+* User enters their email address or username
+* Django sends them an email with a token to reset their password
 * User chooses a new password
 
-The token is not stored server-side, it is generated using Django's signing
+The token is not stored server-side; it is generated using Django's signing
 functionality.
 
 * Author: Bruno Renié and `contributors`_
