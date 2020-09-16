@@ -1,6 +1,6 @@
 import django
 from django.core import mail
-from django.core.urlresolvers import reverse
+from password_reset.compat.urls import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone

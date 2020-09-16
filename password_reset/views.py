@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from django.core import signing
 from django.core.mail import EmailMultiAlternatives
-from django.core.urlresolvers import reverse, reverse_lazy
+from password_reset.compat.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404
 from django.template import loader
