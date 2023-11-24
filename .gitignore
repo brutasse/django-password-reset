@@ -1,6 +1,9 @@
 django_password_reset.egg-info
 dist
 docs/_build
+.idea
 *.pyc
 .tox
 build
+password_reset.egg-info
+.pytest_cache

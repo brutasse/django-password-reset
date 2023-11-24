@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.six import with_metaclass
 
 from ..forms import PasswordRecoveryForm, PasswordResetForm
 from .models import CustomUser, ExtensionUser
@@ -38,7 +37,7 @@ def create_user():
     return get_user_model()._default_manager.create_user(*args, **kwargs)
 
 
-class FormTests(with_metaclass(CustomUserVariants, TestCase)):
+class FormTests(TestCase, metaclass=CustomUserVariants):
     def test_username_input(self):
         User = get_user_model()
         if User is CustomUser:
@@ -199,7 +198,7 @@ class FormTests(with_metaclass(CustomUserVariants, TestCase)):
                          user.password)
 
 
-class ViewTests(with_metaclass(CustomUserVariants, TestCase)):
+class ViewTests(TestCase, metaclass=CustomUserVariants):
     def test_recover(self):
         self.user = create_user()
         url = reverse('password_reset_recover')
