@@ -24,6 +24,7 @@ Contents:
    quickstart
    views
    signals
+   customization
 
 Changelog
 ---------
