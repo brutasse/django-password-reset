@@ -137,14 +137,16 @@ class Reset(SaltMixin, generic.FormView):
             pk = signing.loads(kwargs['token'],
                                max_age=self.get_token_expires(),
                                salt=self.salt)
+        except signing.SignatureExpired:
+            return self.invalid(expired=True)
         except signing.BadSignature:
             return self.invalid()
 
         self.user = get_object_or_404(get_user_model(), pk=pk)
         return super(Reset, self).dispatch(request, *args, **kwargs)
 
-    def invalid(self):
-        return self.render_to_response(self.get_context_data(invalid=True))
+    def invalid(self, expired=False):
+        return self.render_to_response(self.get_context_data(invalid=True, expired=expired))
 
     def get_form_kwargs(self):
         kwargs = super(Reset, self).get_form_kwargs()
