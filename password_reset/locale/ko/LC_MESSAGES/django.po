@@ -1,0 +1,128 @@
+# django-password-reset translations for KO.
+# This file is distributed under the same license as the django-password-reset package.
+# Tockiib <tockiib@gmail.com>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-16 10:29+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Tockiib <tockiib@gmail.com>\n"
+"Language-Team: KO <tockiib@gmail.com>\n"
+"Language: KO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\password_reset\forms.py:13
+msgid "Sorry, this user doesn't exist."
+msgstr "해당 사용자가 존재하지 않습니다."
+
+#: .\password_reset\forms.py:30
+msgid "Username"
+msgstr "사용자 이름"
+
+#: .\password_reset\forms.py:31
+msgid "Email"
+msgstr "이메일"
+
+#: .\password_reset\forms.py:32
+msgid "Username or Email"
+msgstr "사용자 이름 또는 이메일"
+
+#: .\password_reset\forms.py:54
+msgid "Sorry, inactive users can't recover their password."
+msgstr "비활성화 계정은 비밀번호를 복구할 수 없습니다."
+
+#: .\password_reset\forms.py:94
+msgid "Unable to find user."
+msgstr "사용자를 찾을 수 없습니다."
+
+#: .\password_reset\forms.py:101
+msgid "New password"
+msgstr "새 비밀번호"
+
+#: .\password_reset\forms.py:105
+msgid "New password (confirm)"
+msgstr "새 비밀번호 (확인)"
+
+#: .\password_reset\forms.py:110
+msgid "The two passwords didn't match."
+msgstr "비밀번호가 일치하지 않습니다."
+
+#: .\password_reset\templates\password_reset\recovery_done.html:3
+msgid "New password set"
+msgstr "새 비밀번호 설정됨"
+
+#: .\password_reset\templates\password_reset\recovery_done.html:6
+msgid ""
+"Your password has successfully been reset. You can use it right now on the "
+"login page."
+msgstr "새 비밀번호가 설정되었습니다. 이제 로그인 할 수 있습니다."
+
+#: .\password_reset\templates\password_reset\recovery_email.txt:1
+#, python-format
+msgid "Dear %(username)s,"
+msgstr "%(username)s님,"
+
+#: .\password_reset\templates\password_reset\recovery_email.txt:3
+#, python-format
+msgid ""
+"You -- or someone pretending to be you -- has requested a password reset on "
+"%(domain)s."
+msgstr "%(domain)s 계정의 비밀번호를 초기화하려는 시도가 있었습니다."
+
+#: .\password_reset\templates\password_reset\recovery_email.txt:5
+msgid "You can set your new password by following this link:"
+msgstr "다음 링크에서 비밀번호를 재설정할 수 있습니다."
+
+#: .\password_reset\templates\password_reset\recovery_email.txt:9
+msgid ""
+"If you don't want to reset your password, simply ignore this email and it "
+"will stay unchanged."
+msgstr "비밀번호 재설정을 원치 않는 경우, 이 이메일을 무시하십시오."
+
+#: .\password_reset\templates\password_reset\recovery_email_subject.txt:1
+#, python-format
+msgid "Password recovery on %(domain)s"
+msgstr "%(domain)s 비밀번호 재설정"
+
+#: .\password_reset\templates\password_reset\recovery_form.html:4
+msgid "Password recovery"
+msgstr "비밀번호 재설정"
+
+#: .\password_reset\templates\password_reset\recovery_form.html:10
+msgid "Recover my password"
+msgstr "확인"
+
+#: .\password_reset\templates\password_reset\reset.html:5
+#, python-format
+msgid ""
+"Sorry, this password reset link is invalid. You can still <a href="
+"\"%(recovery_url)s\">request a new one</a>."
+msgstr "이 링크는 사용할 수 없습니다. 하지만 <a href="
+"\"%(recovery_url)s\">새 링크</a>를 요청할 수 있습니다."
+
+#: .\password_reset\templates\password_reset\reset.html:7
+#, python-format
+msgid "Hi, <strong>%(username)s</strong>. Please choose your new password."
+msgstr "<strong>%(username)s</strong>님, 새 비밀번호를 입력하세요"
+
+#: .\password_reset\templates\password_reset\reset.html:11
+msgid "Set new password"
+msgstr "새 비밀번호 설정하기"
+
+#: .\password_reset\templates\password_reset\reset_sent.html:4
+msgid "Password recovery sent"
+msgstr "비밀번호 복구 이메일 발송됨"
+
+#: .\password_reset\templates\password_reset\reset_sent.html:7
+#, python-format
+msgid ""
+"An email was sent to <strong>%(email)s</strong> %(ago)s ago. Use the link in "
+"it to set a new password."
+msgstr "%(ago)s 전에 <strong>%(email)s</strong>로 이메일을 보냈습니다."
+"이메일에 있는 링크로 비밀번호를 재설정하십시오."
