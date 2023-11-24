@@ -56,11 +56,17 @@ class PasswordRecoveryForm(forms.Form):
 
         return username
 
+    def get_user(self, *args, **kwargs):
+        """ Method used to customize how to get the user into subclasses.
+        :rtype: User object
+        """
+        return get_user_model()._default_manager.get(*args, **kwargs)
+
     def get_user_by_username(self, username):
         key = 'username__%sexact' % ('' if self.case_sensitive else 'i')
         User = get_user_model()
         try:
-            user = User._default_manager.get(**{key: username})
+            user = self.get_user(**{key: username})
         except User.DoesNotExist:
             raise forms.ValidationError(self.error_messages['not_found'],
                                         code='not_found')
@@ -71,7 +77,7 @@ class PasswordRecoveryForm(forms.Form):
         key = 'email__%sexact' % ('' if self.case_sensitive else 'i')
         User = get_user_model()
         try:
-            user = User._default_manager.get(**{key: email})
+            user = self.get_user(**{key: email})
         except User.DoesNotExist:
             raise forms.ValidationError(self.error_messages['not_found'],
                                         code='not_found')
@@ -86,7 +92,7 @@ class PasswordRecoveryForm(forms.Form):
         filters = f('username') | f('email')
         User = get_user_model()
         try:
-            user = User._default_manager.get(filters)
+            user = self.get_user(filters)
         except User.DoesNotExist:
             raise forms.ValidationError(self.error_messages['not_found'],
                                         code='not_found')
