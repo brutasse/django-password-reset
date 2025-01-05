@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
-from setuptools import find_packages
-
+with open('README.rst', 'r', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='django-password-reset',
@@ -17,23 +14,22 @@ setup(
     url='https://github.com/brutasse/django-password-reset',
     license='BSD licence, see LICENSE file',
     description='Class-based views for password reset.',
-    long_description=open('README.rst').read(),
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
     install_requires=[
-        'Django>=1.11',
+        'Django>=4.0',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 1.11',
-        'Framework :: Django :: 2.0',
-        'Framework :: Django :: 2.1',
+        'Framework :: Django :: 4.0',
+        'Framework :: Django :: 5.1',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
     ],
-    test_suite='runtests.runtests',
     zip_safe=False,
 )
